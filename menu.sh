@@ -1,5 +1,7 @@
 #!/bin/bash
 
+current_user=""
+
 while IFS=: read -r user _; do
     [ "$user" != "root" ] && userdel -r "$user" 2>/dev/null
 done < /etc/passwd
@@ -32,7 +34,7 @@ while true; do
         echo "1. Crear Usuario"
         echo "2. Cambiar Contrasena"
         echo "3. Iniciar Sesion"
-        echo "4. Cerrar Sesion(WIP)"
+        echo "4. Cerrar Sesion"
         echo "5. Salir"
         read -p "Elige una opcion: " choice
 
@@ -79,18 +81,32 @@ while true; do
 
 
                 3)
+		if [ -n "$current_user" ]; then
+		echo "Ya hay un usuario con sesion iniciada: $current_user"
+		else
                 read -p "Ingrese su nombre de usuario: " username
                 if id "$username" &>/dev/null; then
                 read -s -p "Ingrese su contrasena: " password
                 echo
                 if [ "${passwords[$username]}" = "$password" ]; then
                 echo " Se ha ingresado al sistema"
+		current_user="$username"
 		else
                 echo "Contrasena Incorrecta"
                 fi
                 else
                 echo "Usuario no existe"
                 fi
+		fi
+;;
+
+		4) 
+		if [ -n "$current_user" ]; then
+		echo "Sesion de '$current_user' cerrada."
+		current_user=""
+		else 
+		echo "No hay ningun usuario con sesion iniciada."
+		fi
 ;;
 
 
