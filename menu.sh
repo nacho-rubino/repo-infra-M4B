@@ -114,11 +114,52 @@ while true; do
                 5)
                 break 
 ;;
+		*)
+		echo "Opcion Invalida"
+;;
 esac
 done
 ;;
+	2)
+	if [ -n "$current_user" ]; then
+	echo "bienvenido '$current_user' al ingreso de productos"
+	else
+	echo "Se necesita un usuario con sesion iniciada para entrar"
+	fi
+;;
+
+    3)
+        if [ -n "$current_user" ]; then
+        echo "bienvenido '$current_user' a la venta de productos"
+        else
+        echo "Se necesita un usuario con sesion iniciada para entrar"
+        fi
+;;
+
+    4)
+        if [ -n "$current_user" ]; then
+        echo "bienvenido '$current_user' al filtro de productos"
+        else
+        echo "Se necesita un usuario con sesion iniciada para entrar"
+        fi
+;;
+
+    5)
+        if [ -n "$current_user" ]; then
+        echo "bienvenido '$current_user' al reporte de pinturas"
+        else
+        echo "Se necesita un usuario con sesion iniciada para entrar"
+        fi
+;;
+
+
+
 	6)
 	exit 0
+;;
+
+	*)
+	echo "Opcion Invalida"
 ;;
 esac
 done
