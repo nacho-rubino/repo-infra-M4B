@@ -5,7 +5,7 @@ apt-get update && apt-get install -y passwd
 nano menu.sh
 chmod +x menu.sh
 ./menu.sh
-sed -i 's/\r$//' menu.sh
+sed -i 's/\r$//' menu.sh (esto es para pasarlo a LF de nuevo, si no runnea normalmente, es pq paso a CRLF por el manejo de git, es meter este commando y queda)
 docker cp sharp_newton:/menu.sh . (Nombre del container mio era sharp_newton, cambia, esto es para pasar la file a la folder)
 
 
