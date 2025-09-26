@@ -5,10 +5,12 @@ INV_FILE="$DATA_DIR/inventario.csv"
 USERS_FILE="$DATA_DIR/users.csv"
 mkdir -p "$DATA_DIR"
 mkdir -p "$DATA_DIR"
-touch "$INV_FILE"
-
-
+echo -n > "$INV_FILE"
 echo "admin,admin" > "$USERS_FILE"
+OUT_FILE="$DATA_DIR/datos.CSV"
+: > "$OUT_FILE"
+
+
 
 current_user=""
 valid_types=("Base" "Layer" "Shade" "Dry" "Contrast" "Technical" "Texture" "Mediums")
@@ -137,6 +139,102 @@ echo "$codigo,$tipo,$esc_modelo,$esc_desc,$cantidad,$precio" >> "$INV_FILE"
 echo "$codigo - $(echo "$tipo" | tr '[:upper:]' '[:lower:]') - $modelo - $descripcion - $cantidad - \$ $precio"
 }
 
+vender_producto() {
+  if [[ ! -s "$INV_FILE" ]]; then
+    echo "No hay productos en inventario."
+    return
+  fi
+
+  echo "=== Lista de productos ==="
+  productos=()
+  i=0
+  while IFS=',' read -r codigo tipo modelo desc cant precio; do
+    productos+=("$codigo,$tipo,$modelo,$desc,$cant,$precio")
+    echo "$((i+1)). $tipo - $modelo - \$ $precio (Stock: $cant)"
+    ((i++))
+  done < "$INV_FILE"
+
+  carrito=()
+  while :; do
+    read -r -p "Ingrese número de producto (0 para terminar): " num
+    [[ "$num" == "0" ]] && break
+    [[ ! "$num" =~ ^[0-9]+$ ]] && { echo "Número inválido."; continue; }
+    (( num < 1 || num > ${#productos[@]} )) && { echo "Número inválido."; continue; }
+
+    IFS=',' read -r codigo tipo modelo desc cant precio <<< "${productos[$((num-1))]}"
+    read -r -p "Cantidad a comprar: " qty
+    [[ ! "$qty" =~ ^[0-9]+$ || "$qty" -lt 1 ]] && { echo "Cantidad inválida."; continue; }
+    (( qty > cant )) && { echo "No hay suficiente stock. Disponible: $cant"; continue; }
+
+    nuevo_stock=$((cant - qty))
+    productos[$((num-1))]="$codigo,$tipo,$modelo,$desc,$nuevo_stock,$precio"
+
+    carrito+=("$tipo,$modelo,$qty,$((qty*precio))")
+    echo "Agregado: $modelo x$qty"
+  done
+
+ printf "%s\n" "${productos[@]}" > "$INV_FILE"
+
+  if [[ ${#carrito[@]} -eq 0 ]]; then
+    echo "No se realizó ninguna compra."
+  else
+    echo "=== Resumen de compra ==="
+    total=0
+    for item in "${carrito[@]}"; do
+      IFS=',' read -r tipo modelo qty subtotal <<< "$item"
+      echo "$tipo - $modelo - $qty - \$ $subtotal"
+      total=$((total+subtotal))
+    done
+    echo "TOTAL: \$ $total"
+  fi
+}
+
+
+
+filtrar_productos() {
+if [[ ! -s "$INV_FILE" ]] then
+echo "No hay productos en el inventario"
+return
+fi
+
+echo "=== Filtro de productos por tipo ==="
+echo "Tipos Disponibles: ${valid_types[*]}"
+read -r -p "Ingrese Tipo (vacio para mostrar todos): " filter
+
+filter_lc=$(echo "$filter" | tr '[:upper:]' '[:lower:]')
+
+i=0
+hubo_salida=0
+while IFS=',' read -r codigo tipo modelo desc cant precio; do
+type_lc=$(echo "$tipo" | tr '[:upper:]' '[:lower:]')
+if [[ -z "$filter_lc" || "$type_lc" == "$filter_lc" ]]; then
+echo "$((i+1)). $codigo - $(echo "$tipo" | tr '[:upper:]' '[:lower:]') - $modelo - $desc - $cant - \$ $precio"
+hubo_salida=1
+fi
+((i++))
+done < "$INV_FILE"
+
+[[ $hubo_salida -eq 0 ]] && echo "No se encontraron productos para ese filtro."
+}
+
+
+crear_reporte() {
+if [[ ! -s "$INV_FILE" ]]; then
+echo "No hay productos en inventario para generar el reporte."
+return
+fi
+
+local OUT_FILE="$DATA_DIR/datos.CSV"
+{
+echo "codigo,tipo,modelo,descripcion,cantidad,precio"
+cat "$INV_FILE"
+} > "$OUT_FILE"
+
+echo "Reporte generado en: $OUT_FILE"
+
+}
+
+
 
 
 
@@ -150,7 +248,7 @@ while true; do
 	echo "=== Menu Principal ==="
 	echo "1. Usuario"
 	echo "2. Ingresar Producto"
-	echo "3. Vender Producto (WIP)"
+	echo "3. Vender Producto"
 	echo "4. Filtro De Productos"
 	echo "5. Crear Reporte De Pinturas"
 	echo "6. Salir"
@@ -190,7 +288,7 @@ done
 
     3)
         if [ -n "$current_user" ]; then
-        echo "bienvenido '$current_user' a la venta de productos"
+	vender_producto
         else
         echo "Se necesita un usuario con sesion iniciada para entrar"
         fi
@@ -198,7 +296,7 @@ done
 
     4)
         if [ -n "$current_user" ]; then
-        echo "bienvenido '$current_user' al filtro de productos"
+        filtrar_productos
         else
         echo "Se necesita un usuario con sesion iniciada para entrar"
         fi
@@ -206,7 +304,7 @@ done
 
     5)
         if [ -n "$current_user" ]; then
-        echo "bienvenido '$current_user' al reporte de pinturas"
+        crear_reporte
         else
         echo "Se necesita un usuario con sesion iniciada para entrar"
         fi
