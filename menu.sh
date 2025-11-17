@@ -107,18 +107,19 @@ done
 }
 
 read_int_ge0() {
-  local prompt="$1" val
-  while :; do
-    read -r -p "$prompt" val
-    if [[ "$val" =~ ^[0-9]+$ ]]; then
-      echo "$val" && return 0
-    fi
-    echo "Debe ser un entero >= 0."
-  done
+local prompt="$1" val
+while :; do
+read -r -p "$prompt" val
+
+if [[ "$val" =~ ^[0-9]+$ ]]; then
+echo "$val"
+return 0
+fi
+ done
 }
 
 
-ingresar_producto() {
+enter_product() {
   echo "=== Ingreso de Producto ==="
   echo "Tipos disponibles: ${valid_types[*]}"
   tipo=""
@@ -139,7 +140,7 @@ echo "$codigo,$tipo,$esc_modelo,$esc_desc,$cantidad,$precio" >> "$INV_FILE"
 echo "$codigo - $(echo "$tipo" | tr '[:upper:]' '[:lower:]') - $modelo - $descripcion - $cantidad - \$ $precio"
 }
 
-vender_producto() {
+sell_product() {
   if [[ ! -s "$INV_FILE" ]]; then
     echo "No hay productos en inventario."
     return
@@ -191,7 +192,7 @@ vender_producto() {
 
 
 
-filtrar_productos() {
+filter_products() {
 if [[ ! -s "$INV_FILE" ]] then
 echo "No hay productos en el inventario"
 return
@@ -218,7 +219,7 @@ done < "$INV_FILE"
 }
 
 
-crear_reporte() {
+create_report() {
 if [[ ! -s "$INV_FILE" ]]; then
 echo "No hay productos en inventario para generar el reporte."
 return
@@ -280,7 +281,7 @@ done
 ;;
 	2)
 	if [ -n "$current_user" ]; then
-	ingresar_producto
+	enter_product
 	else
 	echo "Se necesita un usuario con sesion iniciada para entrar"
 	fi
@@ -288,7 +289,7 @@ done
 
     3)
         if [ -n "$current_user" ]; then
-	vender_producto
+	sell_product
         else
         echo "Se necesita un usuario con sesion iniciada para entrar"
         fi
@@ -296,7 +297,7 @@ done
 
     4)
         if [ -n "$current_user" ]; then
-        filtrar_productos
+        filter_products
         else
         echo "Se necesita un usuario con sesion iniciada para entrar"
         fi
@@ -304,7 +305,7 @@ done
 
     5)
         if [ -n "$current_user" ]; then
-        crear_reporte
+        create_report
         else
         echo "Se necesita un usuario con sesion iniciada para entrar"
         fi
