@@ -2,6 +2,10 @@ docker run -it -v "C:\Users\santi\OneDrive\Desktop\Studies\INFRAESTRUCTURA\infra
 cd /mnt/host_folder
 apt update && apt install nano -y
 apt-get update && apt-get install -y passwd
+apt-get update
+apt-get install -y gcc
+gcc -o posix posix.c -pthread
+./posix
 nano menu.sh
 chmod +x menu.sh
 ./menu.sh
