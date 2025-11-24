@@ -1,6 +1,5 @@
 #include <stdio.h>
-<<<<<<<<< Temporary merge branch 1
-=========
+
 #include <stdlib.h>
 #include <pthread.h>
 #include <semaphore.h>
@@ -162,4 +161,3 @@ sem_destroy(&sem_puede_leer[i]);
 }
 return 0;
 }
->>>>>>>>> Temporary merge branch 2

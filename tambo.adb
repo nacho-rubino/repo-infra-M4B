@@ -2,26 +2,32 @@ with Ada.Text_IO; use Ada.Text_IO;
 with Ada.Integer_Text_IO;
 with Ada.Numerics.Discrete_Random;
 with Ada.Calendar; use Ada.Calendar;
-with Ada.Real_Time; use Ada.Real_Time;
 
 procedure Tambo is
 
+   --------------
+   -- RANDOM ---
+   --------------
    package Rand_Int is new Ada.Numerics.Discrete_Random (Integer);
    Gen : Rand_Int.Generator;
 
    function Random_Delay (Max : Integer) return Duration is
    begin
-      return Duration(Rand_Int.Random (Gen) mod Max + 1);
+      return Duration ((Rand_Int.Random (Gen) mod Max) + 1);
    end Random_Delay;
 
-   protected Ordeñe is
+
+   --------------------------
+   -- AREA DE ORDENE (15) --
+   --------------------------
+   protected Ordene is
       entry Entrar;
       procedure Salir;
    private
       Capacidad : Integer := 15;
-   end Ordeñe;
+   end Ordene;
 
-   protected body Ordeñe is
+   protected body Ordene is
       entry Entrar when Capacidad > 0 is
       begin
          Capacidad := Capacidad - 1;
@@ -31,8 +37,12 @@ procedure Tambo is
       begin
          Capacidad := Capacidad + 1;
       end Salir;
-   end Ordeñe;
+   end Ordene;
 
+
+   -------------------------------
+   -- PASILLO (DE 1 A LA VEZ)  ---
+   -------------------------------
    protected Pasillo is
       entry Entrar;
       procedure Salir;
@@ -52,6 +62,10 @@ procedure Tambo is
       end Salir;
    end Pasillo;
 
+
+   ----------------------------
+   -- MANGAS (Cupo = 5)     --
+   ----------------------------
    protected Mangas is
       entry Entrar;
       procedure Salir;
@@ -71,65 +85,110 @@ procedure Tambo is
       end Salir;
    end Mangas;
 
+
+   -------------------------------
+   -- DOS CAMIONES DE 50 VACAS --
+   -------------------------------
    protected Camiones is
-      entry Subir (Vaca : Integer);
+      entry Subir (V : Integer);
       function Llenos return Boolean;
    private
-      Cam1 : Integer := 0;
-      Cam2 : Integer := 0;
+      C1 : Integer := 0;
+      C2 : Integer := 0;
    end Camiones;
 
    protected body Camiones is
-      entry Subir (Vaca : Integer) when Cam1 < 50 or Cam2 < 50 is
+      entry Subir (V : Integer) when C1 < 50 or C2 < 50 is
       begin
-         if Cam1 < 50 then
-            Cam1 := Cam1 + 1;
-            Put_Line ("La vaca " & Integer'Image(Vaca) & " está entrando al Camión 1");
+         if C1 < 50 then
+            C1 := C1 + 1;
+            Put_Line ("La vaca" & Integer'Image(V) & " esta entrando al Camion 1");
          else
-            Cam2 := Cam2 + 1;
-            Put_Line ("La vaca " & Integer'Image(Vaca) & " está entrando al Camión 2");
+            C2 := C2 + 1;
+            Put_Line ("La vaca" & Integer'Image(V) & " esta entrando al Camion 2");
          end if;
       end Subir;
 
       function Llenos return Boolean is
       begin
-         return Cam1 = 50 and Cam2 = 50;
+         return C1 = 50 and C2 = 50;
       end Llenos;
    end Camiones;
 
-   task type Vaca (ID : Integer);
+
+   -----------
+   -- VACA --
+   -----------
+   task type Vaca (ID : Integer := 0);
 
    task body Vaca is
+      Orden : Integer := Rand_Int.Random (Gen) mod 2;
    begin
 
-      Put_Line ("La vaca" & Integer'Image(ID) & " está entrando al área de ordeñe");
-      Ordeñe.Entrar;
-      delay Random_Delay(3);
-      Put_Line ("La vaca" & Integer'Image(ID) & " está saliendo al área de ordeñe");
-      Ordeñe.Salir;
+      ---------------------------
+      -- ORDEN = 0 ORDEÑE→VACUNA
+      -- ORDEN = 1 VACUNA→ORDEÑE
+      ---------------------------
 
-      Put_Line ("La vaca" & Integer'Image(ID) & " está entrando al área de vacunación");
-      Pasillo.Entrar;
-      Mangas.Entrar;
-      Pasillo.Salir;
+      if Orden = 0 then
+         Put_Line ("La vaca" & Integer'Image(ID) & " esta entrando al area de ordene");
+         Ordene.Entrar;
+         delay Random_Delay(3);
+         Put_Line ("La vaca" & Integer'Image(ID) & " esta saliendo del area de ordene");
+         Ordene.Salir;
 
-      delay Random_Delay(2);
+         Put_Line ("La vaca" & Integer'Image(ID) & " esta entrando al area de vacunacion");
+         Pasillo.Entrar;
+         Mangas.Entrar;
+         Pasillo.Salir;
+         delay Random_Delay(2);
+         Pasillo.Entrar;
+         Mangas.Salir;
+         Pasillo.Salir;
+         Put_Line ("La vaca" & Integer'Image(ID) & " esta saliendo del area de vacunacion");
 
-      Mangas.Salir;
-      Put_Line ("La vaca" & Integer'Image(ID) & " está saliendo al área de vacunación");
+      else
+         Put_Line ("La vaca" & Integer'Image(ID) & " esta entrando al area de vacunacion");
+         Pasillo.Entrar;
+         Mangas.Entrar;
+         Pasillo.Salir;
+         delay Random_Delay(2);
+         Pasillo.Entrar;
+         Mangas.Salir;
+         Pasillo.Salir;
+         Put_Line ("La vaca" & Integer'Image(ID) & " esta saliendo del area de vacunacion");
+
+         Put_Line ("La vaca" & Integer'Image(ID) & " esta entrando al area de ordene");
+         Ordene.Entrar;
+         delay Random_Delay(3);
+         Put_Line ("La vaca" & Integer'Image(ID) & " esta saliendo del area de ordene");
+         Ordene.Salir;
+      end if;
 
       Camiones.Subir(ID);
+
    end Vaca;
 
-   Vacas : array (1 .. 100) of Vaca;
+
+   -----------------------
+   -- CREAR 100 VACAS  --
+   -----------------------
+   type Vaca_Access is access Vaca;
+   Vacas : array (1 .. 100) of Vaca_Access;
 
 begin
    Rand_Int.Reset(Gen);
 
-   loop
-      exit when Camiones.Llenos;
-      delay 0.5;
+   -- Crear cada vaca con su ID
+   for I in 1 .. 100 loop
+      Vacas(I) := new Vaca(ID => I);
    end loop;
 
-   Put_Line ("Los dos camiones están llenos. Fin del proceso.");
+   -- Esperar a que se llenen los camiones
+   loop
+      exit when Camiones.Llenos;
+      delay 0.2;
+   end loop;
+
+   Put_Line ("Los dos camiones estan llenos. Fin del proceso.");
 end Tambo;
