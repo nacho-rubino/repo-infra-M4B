@@ -1,0 +1,56 @@
+services:
+  web1:
+    build: ./web
+    container_name: os-todo-web1
+    hostname: web1
+    restart: unless-stopped
+    depends_on:
+      - redis
+    environment:
+      - NODE_ENV=production
+    networks:
+      - app-net
+
+  web2:
+    build: ./web
+    container_name: os-todo-web2
+    hostname: web2
+    restart: unless-stopped
+    depends_on:
+      - redis
+    environment:
+      - NODE_ENV=production
+    networks:
+      - app-net
+
+  redis:
+    image: redis:6-alpine
+    container_name: os-todo-redis
+    hostname: redis
+    restart: unless-stopped
+    command: ["redis-server", "--appendonly", "yes"]
+    volumes:
+      - redis-data:/data
+    networks:
+      - app-net
+
+  nginx:
+    build: ./nginx
+    container_name: os-todo-nginx
+    hostname: nginx
+    restart: unless-stopped
+    depends_on:
+      - web1
+      - web2
+    ports:
+      - "5000:80"   # único puerto expuesto hacia afuera
+    networks:
+      - app-net
+
+networks:
+  app-net:
+    driver: bridge
+
+volumes:
+  redis-data:
+
