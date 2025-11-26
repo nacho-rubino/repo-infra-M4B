@@ -160,3 +160,4 @@ sem_destroy(&sem_puede_leer[i]);
 }
 return 0;
 }
+
