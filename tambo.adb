@@ -6,20 +6,17 @@ with Ada.Real_Time;              use Ada.Real_Time;
 
 procedure Tambo is
 
-   --------------------------------------------------------------------
-   -- RANDOM
-   --------------------------------------------------------------------
+   -- Random
+
    package Rand_Int is new Ada.Numerics.Discrete_Random (Integer);
 
-   -- devuelve un delay aleatorio entre 1 y Max segundos
    function Rand_Delay (Max : Integer; Local_Gen : Rand_Int.Generator) return Duration is
    begin
       return Duration (Float (Rand_Int.Random (Local_Gen) mod Max + 1));
    end Rand_Delay;
 
-   --------------------------------------------------------------------
-   -- AREA DE ORDENE (15 vacas de capacidad)
-   --------------------------------------------------------------------
+   -- Area de ordenie (15 vacas de capacidad)
+
    protected Ordene is
       entry Entrar;
       procedure Salir;
@@ -40,10 +37,8 @@ procedure Tambo is
    end Ordene;
 
 
-   --------------------------------------------------------------------
-   -- PASILLO (1 sola vaca)
-   --------------------------------------------------------------------
-   protected Pasillo is
+   -- Pasillo (1 vaca)
+
       entry Entrar;
       procedure Salir;
    private
@@ -63,9 +58,8 @@ procedure Tambo is
    end Pasillo;
 
 
-   --------------------------------------------------------------------
-   -- MANGAS (5 vacas)
-   --------------------------------------------------------------------
+   -- Mangas (5 vacas)
+
    protected Mangas is
       entry Entrar;
       procedure Salir;
@@ -86,9 +80,8 @@ procedure Tambo is
    end Mangas;
 
 
-   --------------------------------------------------------------------
-   -- CAMIONES
-   --------------------------------------------------------------------
+   -- Camiones
+
    protected Camiones is
       entry Subir (V : Integer);
       function Llenos return Boolean;
@@ -117,10 +110,7 @@ procedure Tambo is
 
    end Camiones;
 
-
-   --------------------------------------------------------------------
-   -- TASK VACA
-   --------------------------------------------------------------------
+   -- Task Vaca
    task type Vaca (ID : Integer);
 
    task body Vaca is
@@ -133,14 +123,14 @@ procedure Tambo is
       Orden := Rand_Int.Random(Local_Gen) mod 2;
 
       if Orden = 0 then
-         -- ORDENAR PRIMERO
+         -- ORDENIAR PRIMERO
          Put_Line ("Vaca" & Integer'Image(ID) & " entra a Ordene");
          Ordene.Entrar;
          delay Rand_Delay(3, Local_Gen);
          Put_Line ("Vaca" & Integer'Image(ID) & " sale de Ordene");
          Ordene.Salir;
 
-         -- VACUNACIÓN
+         -- VACUNACIÓN!! acaaaaaaa
          Put_Line ("Vaca" & Integer'Image(ID) & " entra a Vacunación");
          Pasillo.Entrar;
          Mangas.Entrar;
