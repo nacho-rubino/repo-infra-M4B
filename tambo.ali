@@ -32,7 +32,7 @@ RV MAX_PROTECTED_ENTRIES=2
 RV MAX_TASKS=1+
 RV MAX_ENTRY_QUEUE_LENGTH=1+
 
-U tambo%b		tambo.adb		dd2ce8d6 NE OO SU
+U tambo%b		tambo.adb		a9a3ed5c NE OO SU
 W ada%s			ada.ads			ada.ali
 Z ada.calendar.delays%s	a-caldel.adb		a-caldel.ali
 Z ada.exceptions%s	a-except.adb		a-except.ali
@@ -42,7 +42,6 @@ Z ada.real_time%s	a-reatim.adb		a-reatim.ali
 Z ada.strings.text_buffers%s  a-sttebu.adb	a-sttebu.ali
 W ada.text_io%s		a-textio.adb		a-textio.ali
 W system%s		system.ads		system.ali
-Z system.concat_2%s	s-conca2.adb		s-conca2.ali
 Z system.concat_3%s	s-conca3.adb		s-conca3.ali
 Z system.img_int%s	s-imgint.ads		s-imgint.ali
 Z system.parameters%s	s-parame.adb		s-parame.ali
@@ -84,7 +83,6 @@ D s-atacco.ads		20240521074738 903317eb system.address_to_access_conversions%s
 D s-assert.ads		20240521074738 9c4520c7 system.assertions%s
 D s-c_time.ads		20240904144414 535885c5 system.c_time%s
 D s-casuti.ads		20240521074738 cf13d755 system.case_util%s
-D s-conca2.ads		20240521074738 b5fb73f7 system.concat_2%s
 D s-conca3.ads		20240521074738 8a7a19a2 system.concat_3%s
 D s-crtl.ads		20240521074738 8a0692f8 system.crtl%s
 D s-exctab.ads		20240521074738 91bef6ef system.exception_table%s
@@ -130,35 +128,35 @@ D s-vauspe.ads		20240521074738 a67b2f28 system.value_u_spec%s
 D s-wchcon.ads		20240521074738 d9032363 system.wch_con%s
 D s-widuns.ads		20240521074738 866a5800 system.wid_uns%s
 D s-widthu.ads		20240521074738 b32f15e2 system.width_u%s
-D tambo.adb		20251127214959 d8845676 tambo%b
+D tambo.adb		20251127215257 ac0b53fc tambo%b
 G a e
 G c Z b b [tambo standard 4 11 none]
 X 1 ada.ads
-16K9*Ada 20e8 75|1r6 1r37 2r6 12r31
+16K9*Ada 20e8 74|1r6 1r37 2r6 12r31
 X 8 a-numeri.ads
-16K13*Numerics 35e17 75|2r10 12r35
+16K13*Numerics 35e17 74|2r10 12r35
 X 11 a-nudira.ads
-44k22*Discrete_Random 81e33 75|2w19 12r44
-50R9 Generator<45|65R9> 75|13r35[12]
-52V13 Random{integer} 75|16s41[12] 166s37[12]
-61U14 Reset<45|103p14> 75|219s16[12]
+44k22*Discrete_Random 81e33 74|2w19 12r44
+50R9 Generator<44|65R9> 74|13r35[12]
+52V13 Random{integer} 74|16s41[12] 166s37[12]
+61U14 Reset<44|103p14> 74|219s16[12]
 X 12 a-nudira.adb
-53V16 Random[45|86]{integer} 46|402b13[75|12]
-65V16 Random[45|86]{integer} 46|402b13[75|12]
+53V16 Random[44|86]{integer} 45|402b13[74|12]
+65V16 Random[44|86]{integer} 45|402b13[74|12]
 X 19 a-textio.ads
-58K13*Text_IO 787e16 75|1w10 1r41
-566U14*Put_Line 75|29s10
+58K13*Text_IO 787e16 74|1w10 1r41
+566U14*Put_Line 74|29s10
 X 21 interfac.ads
 80M9*Unsigned_32
 83M9*Unsigned_64
-X 45 s-rannum.ads
-77V13*Random{21|80M9} 46|224i21
-78V13*Random{21|83M9} 46|224i21
-X 51 s-stausa.ads
+X 44 s-rannum.ads
+77V13*Random{21|80M9} 45|224i21
+78V13*Random{21|83M9} 45|224i21
+X 50 s-stausa.ads
 207U14*Initialize 208i<c,__gnat_stack_usage_initialize>22
 272U14*Output_Results 276i<c,__gnat_stack_usage_output_results>22
-X 75 tambo.adb
-4U11*Tambo 4b11 231l5 231t10
+X 74 tambo.adb
+4U11*Tambo 4b11 230l5 230t10
 6i4 Cantidad_Vacas{integer} 216r24 226r34
 7i4 Capacidad_Ordenie{integer} 72r26 79r26
 8i4 Capacidad_Vacunas{integer} 108r26 115r26
@@ -171,9 +169,7 @@ X 75 tambo.adb
 15f31 Max{float} 18r48
 16i7 Valor{11I12} 18r30
 22w14 Log 26b19 31l8 31t11 47r10 55r10 83r10 91r10 119r10 127r10 148r13 151r13
-. 230r4
 23U17 P 23>20 27b17 30t10 47s14 55s14 83s14 91s14 119s14 127s14 148s17 151s17
-. 230s8
 23a20 S{string} 27b20 29r19
 33w14 Pasillo 40b19 58l8 58t15 172r10 173r10 181r10 182r10 192r10 193r10
 . 201r10 202r10
@@ -202,10 +198,10 @@ X 75 tambo.adb
 102i7 Ocupacion{integer} 108r14 115r14 118r10 118r23 123r14 126r10 126r23
 114i21 Id{integer}
 122i20 Id{integer}
-132w14 Camiones 140b19 160l8 160t16 211r7 226r17 230r66
+132w14 Camiones 140b19 160l8 160t16 211r7 226r17
 133Y13 Subir 133>20 142b13 153l11 153t16 211s16
 133i20 Id{integer} 148r45 151r45
-134V16 Total{integer} 155b16 158l11 158t16 226s26 230s75
+134V16 Total{integer} 155b16 158l11 158t16 226s26
 136i7 C1{integer} 143r15 146r13 147r13 147r19 157r17
 137i7 C2{integer} 143r47 150r13 150r19 157r22
 142i20 Id{integer}
