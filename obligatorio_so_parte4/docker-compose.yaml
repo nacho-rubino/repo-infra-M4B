@@ -27,7 +27,7 @@ services:
     hostname: redis
     restart: unless-stopped
     volumes:
-      - redis-data:/data        # Persistencia de redis
+      - redis-data:/data        
     networks:
       - app-net
 
