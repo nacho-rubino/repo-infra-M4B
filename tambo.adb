@@ -3,9 +3,6 @@ with Ada.Numerics.Discrete_Random;
 
 procedure Tambo is
 
-   -----------------------------------------------------------------------
-   -- CONFIGURACIÓN GENERAL
-   -----------------------------------------------------------------------
    Cantidad_Vacas     : constant Integer := 100;
    Capacidad_Ordenie  : constant Integer := 15;
    Capacidad_Vacunas  : constant Integer := 5;
@@ -21,104 +18,119 @@ procedure Tambo is
       return Duration (Float(Valor) / 1000.0 * Max);
    end Tiempo_Aleatorio;
 
-   -----------------------------------------------------------------------
-   -- PASILLO (solo 1 vaca a la vez)
-   -----------------------------------------------------------------------
+
+   protected Log is
+      procedure P (S : String);
+   end Log;
+
+   protected body Log is
+      procedure P (S : String) is
+      begin
+         Put_Line(S);
+      end;
+   end Log;
+
    protected Pasillo is
-      entry Entrar (Vaca_Id : Integer);
-      entry Salir  (Vaca_Id : Integer);
+      entry Entrar (Id : Integer);
+      entry Salir  (Id : Integer);
    private
       Ocupado : Boolean := False;
    end Pasillo;
 
    protected body Pasillo is
 
-      entry Entrar (Vaca_Id : Integer)
+      entry Entrar (Id : Integer)
         when not Ocupado
       is
       begin
          Ocupado := True;
-         Put_Line("La vaca" & Integer'Image(Vaca_Id) & " esta entrando al pasillo");
+         Log.P("La vaca" & Integer'Image(Id) & " esta entrando al pasillo");
       end Entrar;
 
-      entry Salir (Vaca_Id : Integer)
+      entry Salir (Id : Integer)
         when Ocupado
       is
       begin
          Ocupado := False;
-         Put_Line("La vaca" & Integer'Image(Vaca_Id) & " esta saliendo del pasillo");
+         Log.P("La vaca" & Integer'Image(Id) & " esta saliendo del pasillo");
       end Salir;
 
    end Pasillo;
 
 
-   -----------------------------------------------------------------------
-   -- ORDEÑE (capacidad 15)
-   -----------------------------------------------------------------------
    protected Ordenie is
-      entry Entrar (Vaca_Id : Integer);
-      entry Salir  (Vaca_Id : Integer);
+      entry Esperar_Lugar;         -- Bloquea hasta que haya lugar
+      entry Entrar (Id : Integer); -- Entra al área
+      entry Salir  (Id : Integer); -- Sale del área
    private
       Ocupacion : Integer := 0;
    end Ordenie;
 
    protected body Ordenie is
 
-      entry Entrar (Vaca_Id : Integer)
+      entry Esperar_Lugar
+        when Ocupacion < Capacidad_Ordenie
+      is
+      begin
+         null;  -- solo espera
+      end Esperar_Lugar;
+
+      entry Entrar (Id : Integer)
         when Ocupacion < Capacidad_Ordenie
       is
       begin
          Ocupacion := Ocupacion + 1;
-         Put_Line("La vaca" & Integer'Image(Vaca_Id) & " esta entrando al area de ordenie");
+         Log.P("La vaca" & Integer'Image(Id) & " esta entrando al area de ordenie");
       end Entrar;
 
-      entry Salir (Vaca_Id : Integer)
+      entry Salir (Id : Integer)
         when Ocupacion > 0
       is
       begin
          Ocupacion := Ocupacion - 1;
-         Put_Line("La vaca" & Integer'Image(Vaca_Id) & " esta saliendo del area de ordenie");
+         Log.P("La vaca" & Integer'Image(Id) & " esta saliendo del area de ordenie");
       end Salir;
 
    end Ordenie;
 
 
-   -----------------------------------------------------------------------
-   -- VACUNACION (capacidad 5)
-   -----------------------------------------------------------------------
    protected Vacunacion is
-      entry Entrar (Vaca_Id : Integer);
-      entry Salir  (Vaca_Id : Integer);
+      entry Esperar_Lugar;
+      entry Entrar (Id : Integer);
+      entry Salir  (Id : Integer);
    private
       Ocupacion : Integer := 0;
    end Vacunacion;
 
    protected body Vacunacion is
 
-      entry Entrar (Vaca_Id : Integer)
+      entry Esperar_Lugar
+        when Ocupacion < Capacidad_Vacunas
+      is
+      begin
+         null;
+      end Esperar_Lugar;
+
+      entry Entrar (Id : Integer)
         when Ocupacion < Capacidad_Vacunas
       is
       begin
          Ocupacion := Ocupacion + 1;
-         Put_Line("La vaca" & Integer'Image(Vaca_Id) & " esta entrando al area de vacunacion");
+         Log.P("La vaca" & Integer'Image(Id) & " esta entrando al area de vacunacion");
       end Entrar;
 
-      entry Salir(Vaca_Id : Integer)
+      entry Salir (Id : Integer)
         when Ocupacion > 0
       is
       begin
          Ocupacion := Ocupacion - 1;
-         Put_Line("La vaca" & Integer'Image(Vaca_Id) & " esta saliendo del area de vacunacion");
+         Log.P("La vaca" & Integer'Image(Id) & " esta saliendo del area de vacunacion");
       end Salir;
 
    end Vacunacion;
 
-
-   -----------------------------------------------------------------------
-   -- CAMIONES (productor/consumidor)
-   -----------------------------------------------------------------------
    protected Camiones is
-      entry Subir (Vaca_Id : Integer);
+      entry Subir (Id : Integer);
       function Total return Integer;
    private
       C1 : Integer := 0;
@@ -127,16 +139,16 @@ procedure Tambo is
 
    protected body Camiones is
 
-      entry Subir (Vaca_Id : Integer)
+      entry Subir (Id : Integer)
         when (C1 < Capacidad_Camion) or else (C2 < Capacidad_Camion)
       is
       begin
          if C1 < Capacidad_Camion then
             C1 := C1 + 1;
-            Put_Line("La vaca" & Integer'Image(Vaca_Id) & " esta subiendo al Camion 1");
+            Log.P("La vaca" & Integer'Image(Id) & " esta subiendo al Camion 1");
          else
             C2 := C2 + 1;
-            Put_Line("La vaca" & Integer'Image(Vaca_Id) & " esta subiendo al Camion 2");
+            Log.P("La vaca" & Integer'Image(Id) & " esta subiendo al Camion 2");
          end if;
       end Subir;
 
@@ -148,56 +160,47 @@ procedure Tambo is
    end Camiones;
 
 
-   -----------------------------------------------------------------------
-   -- TAREA VACA
-   -----------------------------------------------------------------------
    task type Vaca (Id : Integer);
 
    task body Vaca is
-      Valor : Rango_Azar := Azar_Entero.Random(Generador_Global);
-      Primero_Vacuna : Boolean := (Valor mod 2 = 0);
+      R : Rango_Azar := Azar_Entero.Random(Generador_Global);
+      Primero_Vacuna : Boolean := (R mod 2 = 0);
    begin
       if Primero_Vacuna then
-         ----------------------------------------------------------------
-         -- VACUNACION
-         ----------------------------------------------------------------
+
+         Vacunacion.Esperar_Lugar;
          Pasillo.Entrar(Id);
-         Vacunacion.Entrar(Id);
          Pasillo.Salir(Id);
+         Vacunacion.Entrar(Id);
 
          delay Tiempo_Aleatorio(2.0);
 
          Vacunacion.Salir(Id);
 
-         ----------------------------------------------------------------
-         -- ORDEÑE
-         ----------------------------------------------------------------
+         Ordenie.Esperar_Lugar;
          Pasillo.Entrar(Id);
-         Ordenie.Entrar(Id);
          Pasillo.Salir(Id);
+         Ordenie.Entrar(Id);
 
          delay Tiempo_Aleatorio(3.0);
 
          Ordenie.Salir(Id);
 
       else
-         ----------------------------------------------------------------
-         -- ORDEÑE
-         ----------------------------------------------------------------
+
+         Ordenie.Esperar_Lugar;
          Pasillo.Entrar(Id);
-         Ordenie.Entrar(Id);
          Pasillo.Salir(Id);
+         Ordenie.Entrar(Id);
 
          delay Tiempo_Aleatorio(3.0);
 
          Ordenie.Salir(Id);
 
-         ----------------------------------------------------------------
-         -- VACUNACION
-         ----------------------------------------------------------------
+         Vacunacion.Esperar_Lugar;
          Pasillo.Entrar(Id);
-         Vacunacion.Entrar(Id);
          Pasillo.Salir(Id);
+         Vacunacion.Entrar(Id);
 
          delay Tiempo_Aleatorio(2.0);
 
@@ -205,33 +208,24 @@ procedure Tambo is
 
       end if;
 
-      ----------------------------------------------------------------
-      -- CAMIÓN (siempre al final)
-      ----------------------------------------------------------------
       Camiones.Subir(Id);
 
    end Vaca;
 
-
-   -----------------------------------------------------------------------
-   -- CREAR LAS VACAS
-   -----------------------------------------------------------------------
    type Ptr_Vaca is access Vaca;
-   Arr : array (1 .. Cantidad_Vacas) of Ptr_Vaca;
+   Vacas : array (1 .. Cantidad_Vacas) of Ptr_Vaca;
 
 begin
    Azar_Entero.Reset(Generador_Global);
 
-   for I in Arr'Range loop
-      Arr(I) := new Vaca(I);
+   for I in Vacas'Range loop
+      Vacas(I) := new Vaca(I);
    end loop;
 
-   -- Esperar todas
    loop
       exit when Camiones.Total = Cantidad_Vacas;
       delay 0.05;
    end loop;
 
-   Put_Line("Simulacion finalizada: total vacas = " & Integer'Image(Camiones.Total));
-
+   Log.P("Simulacion finalizada: total vacas = " & Integer'Image(Camiones.Total));
 end Tambo;
