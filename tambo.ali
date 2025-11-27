@@ -5,9 +5,7 @@ P SS ZX
 RN
 RV SIMPLE_BARRIERS
 RV NO_ALLOCATORS
-RV NO_CALENDAR
 RV NO_DELAY
-RV NO_DIRECT_BOOLEAN_OPERATORS
 RV NO_EXCEPTION_HANDLERS
 RV NO_EXCEPTION_PROPAGATION
 RV NO_EXCEPTIONS
@@ -30,23 +28,20 @@ RV NO_DEFAULT_INITIALIZATION
 RV NO_DYNAMIC_SIZED_OBJECTS
 RV NO_IMPLEMENTATION_PRAGMAS
 RV NO_IMPLICIT_LOOPS
-RV MAX_PROTECTED_ENTRIES=1
+RV MAX_PROTECTED_ENTRIES=2
 RV MAX_TASKS=1+
 RV MAX_ENTRY_QUEUE_LENGTH=1+
 
-U tambo%b		tambo.adb		1dd9cd6c NE OO SU
+U tambo%b		tambo.adb		a1ec9bbf NE OO SU
 W ada%s			ada.ads			ada.ali
-W ada.calendar%s	a-calend.adb		a-calend.ali
 Z ada.calendar.delays%s	a-caldel.adb		a-caldel.ali
 Z ada.exceptions%s	a-except.adb		a-except.ali
-W ada.integer_text_io%s	a-inteio.ads		a-inteio.ali
 W ada.numerics%s	a-numeri.ads		a-numeri.ali
 W ada.numerics.discrete_random%s
-W ada.real_time%s	a-reatim.adb		a-reatim.ali
+Z ada.real_time%s	a-reatim.adb		a-reatim.ali
 Z ada.strings.text_buffers%s  a-sttebu.adb	a-sttebu.ali
 W ada.text_io%s		a-textio.adb		a-textio.ali
 W system%s		system.ads		system.ali
-Z system.concat_2%s	s-conca2.adb		s-conca2.ali
 Z system.concat_3%s	s-conca3.adb		s-conca3.ali
 Z system.img_int%s	s-imgint.ads		s-imgint.ali
 Z system.parameters%s	s-parame.adb		s-parame.ali
@@ -66,7 +61,6 @@ D a-calend.ads		20240904144414 e6961b4c ada.calendar%s
 D a-caldel.ads		20240521074737 9f20b83d ada.calendar.delays%s
 D a-except.ads		20240521074738 2a7d8d70 ada.exceptions%s
 D a-finali.ads		20240521074738 bf4f806b ada.finalization%s
-D a-inteio.ads		20240521074738 f64b89a4 ada.integer_text_io%s
 D a-ioexce.ads		20240521074738 40018c65 ada.io_exceptions%s
 D a-numeri.ads		20240521074738 84bea7a3 ada.numerics%s
 D a-nubinu.ads		20240521074738 93f1f3d1 ada.numerics.big_numbers%s
@@ -80,7 +74,6 @@ D a-sttebu.ads		20240521074738 f1ad67a2 ada.strings.text_buffers%s
 D a-stuten.ads		20240521074738 c6ced0ae ada.strings.utf_encoding%s
 D a-tags.ads		20240521074738 9eaa38c6 ada.tags%s
 D a-textio.ads		20240521074738 5c2c6153 ada.text_io%s
-D a-tiinio.ads		20240521074738 e58fa6fb ada.text_io.integer_io%s
 D a-unccon.ads		20240521074738 0e9b276f ada.unchecked_conversion%s
 D interfac.ads		20240521074738 15f799c2 interfaces%s
 D i-c.ads		20240521074738 5c5a6c17 interfaces.c%s
@@ -90,7 +83,6 @@ D s-atacco.ads		20240521074738 903317eb system.address_to_access_conversions%s
 D s-assert.ads		20240521074738 9c4520c7 system.assertions%s
 D s-c_time.ads		20240904144414 535885c5 system.c_time%s
 D s-casuti.ads		20240521074738 cf13d755 system.case_util%s
-D s-conca2.ads		20240521074738 b5fb73f7 system.concat_2%s
 D s-conca3.ads		20240521074738 8a7a19a2 system.concat_3%s
 D s-crtl.ads		20240521074738 8a0692f8 system.crtl%s
 D s-exctab.ads		20240521074738 91bef6ef system.exception_table%s
@@ -136,74 +128,74 @@ D s-vauspe.ads		20240521074738 a67b2f28 system.value_u_spec%s
 D s-wchcon.ads		20240521074738 d9032363 system.wch_con%s
 D s-widuns.ads		20240521074738 866a5800 system.wid_uns%s
 D s-widthu.ads		20240521074738 b32f15e2 system.width_u%s
-D tambo.adb		20251127195108 b036f1e7 tambo%b
+D tambo.adb		20251127204713 a444251f tambo%b
 G a e
-G c Z b b [tambo standard 7 11 none]
+G c Z b b [tambo standard 4 11 none]
 X 1 ada.ads
-16K9*Ada 20e8 77|1r6 1r38 2r6 3r6 4r6 4r38 5r6 5r38 9r28 89r13 93r13
-X 3 a-calend.ads
-36K13*Calendar 402e17 77|4w10 4r42
-X 7 a-inteio.ads
-18K13*Integer_Text_IO[21|46] 77|2w10
-X 9 a-numeri.ads
-16K13*Numerics 35e17 77|3r10 9r32
-X 12 a-nudira.ads
-44k22*Discrete_Random 81e33 77|3w19 9r41
-50R9 Generator<47|65R9> 77|11r61[9] 106r28[9]
-52V13 Random{integer} 77|15s40[9] 111s25[9]
-60U14 Reset<47|109p14> 77|109s16[9]
-X 13 a-nudira.adb
-53V16 Random[47|86]{integer} 48|402b13[77|9]
-65V16 Random[47|86]{integer} 48|402b13[77|9]
-X 14 a-reatim.ads
-39K13*Real_Time 186e18 77|5w10 5r42
-X 20 a-textio.ads
-58K13*Text_IO 787e16 77|1w10 1r42 89r17 93r17
-218U14*Flush 77|89s25 93s25
-566U14*Put_Line 77|88s13 92s13 114s10 117s10 120s10 131s10 134s10 145s10
-. 147s10 150s10 161s4 172s4 173s4 174s4
-X 23 interfac.ads
+16K9*Ada 20e8 74|1r6 1r37 2r6 15r31
+X 8 a-numeri.ads
+16K13*Numerics 35e17 74|2r10 15r35
+X 11 a-nudira.ads
+44k22*Discrete_Random 81e33 74|2w19 15r44
+50R9 Generator<44|65R9> 74|16r35[15]
+52V13 Random{integer} 74|19s41[15] 125s48[15]
+61U14 Reset<44|103p14> 74|160s16[15]
+X 12 a-nudira.adb
+53V16 Random[44|86]{integer} 45|402b13[74|15]
+65V16 Random[44|86]{integer} 45|402b13[74|15]
+X 19 a-textio.ads
+58K13*Text_IO 787e16 74|1w10 1r41
+566U14*Put_Line 74|42s10 51s10 75s10 84s10 108s13 112s13
+X 21 interfac.ads
 80M9*Unsigned_32
 83M9*Unsigned_64
-X 47 s-rannum.ads
-77V13*Random{23|80M9} 48|224i21
-78V13*Random{23|83M9} 48|224i21
-X 53 s-stausa.ads
+X 44 s-rannum.ads
+77V13*Random{21|80M9} 45|224i21
+78V13*Random{21|83M9} 45|224i21
+X 50 s-stausa.ads
 207U14*Initialize 208i<c,__gnat_stack_usage_initialize>22
 272U14*Output_Results 276i<c,__gnat_stack_usage_output_results>22
-X 77 tambo.adb
-7U11*Tambo 7b11 176l5 176t10
-9K12 Rand_Int[12|44] 11r52 15r31 106r19 109r7 111r16
-11V13 Rand_Delay{duration} 11b13 11>25 11>40 16l8 16t18 116s16 125s16 139s16
-. 149s16
-11i25 Max{integer} 15r63
-11r40 Local_Gen{12|50R9[9]} 15r48
-18w14 Ordene 25b19 35l8 35t14 115r10 118r10 148r10 151r10
-19Y13 Entrar 26b13 29l11 29t17 115s17 148s17
-20U17 Salir 31b17 34l11 34t16 118s17 151s17
-22i7 Capacidad{integer} 26r25 28r10 28r23 33r10 33r23
-37w14 Pasillo 44b19 54l8 54t15 121r10 123r10 127r10 129r10 135r10 137r10
-. 141r10 143r10
-38Y13 Entrar 45b13 48l11 48t17 121s18 127s18 135s18 141s18
-39U17 Salir 50b17 53l11 53t16 123s18 129s18 137s18 143s18
-41b7 Libre{boolean} 45r25 47r10 52r10
-56w14 Mangas 63b19 73l8 73t14 122r10 128r10 136r10 142r10
-57Y13 Entrar 64b13 67l11 67t17 122s17 136s17
-58U17 Salir 69b17 72l11 72t16 128s17 142s17
-60i7 Cupo{integer} 64r25 66r10 66r18 71r10 71r18
-75w14 Camiones 83b19 101l8 101t16 154r7 168r17
-76Y13 Subir 76>20 84b13 95l11 95t16 154s16
-76i20 V{integer} 88r62 92r62
-77V16 Llenos{boolean} 97b16 100l11 100t17 168s26
-79i7 C1{integer} 84r39 86r13 87r13 87r19 99r17
-80i7 C2{integer} 84r50 91r13 91r19 99r29
-84i20 V{integer}
-103T14 Vaca 103d20 105b14 155l8 155t12 157r31 164r23
-103i20 ID{integer} 109r33 114r43 117r43 120r43 131r43 134r43 145r43 147r43
-. 150r43 154r22
-106r7 Local_Gen{12|50R9[9]} 109r22 111r32 116r30 125r30 139r30 149r30
-107i7 Orden{integer} 111m7 113r10
-157P9 Vaca_Access(103T14) 158r32
-158a4 Vacas(157P9) 164m7
-163i8 I{integer} 164r13 164r34
+X 74 tambo.adb
+4U11*Tambo 4b11 166l5 166t10
+9i4 Cantidad_Vacas{integer} 157r24
+10i4 Capacidad_Ordenie{integer} 38r26
+11i4 Capacidad_Vacunas{integer} 71r26
+12i4 Capacidad_Camion{integer} 103r25 103r62 106r23
+14I12 Rango_Azar{integer} 15r60 19r15 125r22
+15K12 Azar_Entero[11|44] 16r23 19r29 125r36 160r4
+16r4 Generador_Global{11|50R9[15]} 19r48 125r55 160r22
+18V13 Tiempo_Aleatorio{duration} 18b13 18>31 22l8 22t24 131s16 135s16 141s16
+. 145s16
+18f31 Max{float} 21r48
+19i7 Valor{14I12} 21r30
+28w14 Ordenie 35b19 55l8 55t15 134r10 136r10 140r10 142r10
+29Y13 Entrar 29>21 37b13 44l11 44t17 134s18 140s18
+29i21 Vaca_Id{integer} 42r46
+30Y13 Salir 30>21 46b13 53l11 53t16 136s18 142s18
+30i21 Vaca_Id{integer} 51r46
+32i7 Ocupacion{integer} 38r14 41r10 41r23 47r14 50r10 50r23
+37i21 Vaca_Id{integer}
+46i20 Vaca_Id{integer}
+61w14 Vacunacion 68b19 88l8 88t18 130r10 132r10 144r10 146r10
+62Y13 Entrar_Vacuna 62>28 70b13 77l11 77t24 130s21 144s21
+62i28 Vaca_Id{integer} 75r46
+63Y13 Salir_Vacuna 63>28 79b13 86l11 86t23 132s21 146s21
+63i28 Vaca_Id{integer} 84r46
+65i7 Ocupacion{integer} 71r14 74r10 74r23 80r14 83r10 83r23
+70i28 Vaca_Id{integer}
+79i27 Vaca_Id{integer}
+94w14 Camiones 101b19 116l8 116t16 149r7
+95Y13 Subir 95>20 102b13 115l11 115t16 149s16
+95i20 Vaca_Id{integer} 108r49 112r49
+97i7 Camion1{integer} 103r15 106r13 107r13 107r24
+98i7 Camion2{integer} 103r52 111r13 111r24
+102i20 Vaca_Id{integer}
+122T14 Vaca 122d20 124b14 150l8 150t12 156r31 163r23
+122i20 Identificador{integer} 130r35 132r34 134r25 136r24 140r25 142r24 144r35
+. 146r34 149r22
+125i7 Valor_Azar{14I12} 126r36
+126b7 Primero_Vacuna{boolean} 128r10
+156P9 Acceso_Vaca(122T14) 157r43
+157a4 Vacas(156P9) 162r13 163m7
+162i8 I{integer} 163r13 163r28
 
