@@ -79,7 +79,7 @@ async function getTasks() {
   });
 }
 
-// Ruta principal
+
 app.get('/', async (req, res) => {
   try {
     const tasks = await getTasks();
@@ -105,7 +105,7 @@ app.get('/', async (req, res) => {
   }
 });
 
-// API para obtener todas las tareas
+
 app.get('/api/tasks', async (req, res) => {
   try {
     const tasks = await getTasks();
@@ -232,3 +232,4 @@ app.get('/api/system-info', (req, res) => {
 app.listen(5000, function() {
     console.log('Sistema de Gestión de Tareas - SO escuchando en el puerto 5000');
 });
+
