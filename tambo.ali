@@ -32,7 +32,7 @@ RV MAX_PROTECTED_ENTRIES=2
 RV MAX_TASKS=1+
 RV MAX_ENTRY_QUEUE_LENGTH=1+
 
-U tambo%b		tambo.adb		a1ec9bbf NE OO SU
+U tambo%b		tambo.adb		50d4cfda NE OO SU
 W ada%s			ada.ads			ada.ali
 Z ada.calendar.delays%s	a-caldel.adb		a-caldel.ali
 Z ada.exceptions%s	a-except.adb		a-except.ali
@@ -128,7 +128,7 @@ D s-vauspe.ads		20240521074738 a67b2f28 system.value_u_spec%s
 D s-wchcon.ads		20240521074738 d9032363 system.wch_con%s
 D s-widuns.ads		20240521074738 866a5800 system.wid_uns%s
 D s-widthu.ads		20240521074738 b32f15e2 system.width_u%s
-D tambo.adb		20251127204713 a444251f tambo%b
+D tambo.adb		20251127211244 557c717a tambo%b
 G a e
 G c Z b b [tambo standard 4 11 none]
 X 1 ada.ads
@@ -138,14 +138,14 @@ X 8 a-numeri.ads
 X 11 a-nudira.ads
 44k22*Discrete_Random 81e33 74|2w19 15r44
 50R9 Generator<44|65R9> 74|16r35[15]
-52V13 Random{integer} 74|19s41[15] 125s48[15]
-61U14 Reset<44|103p14> 74|160s16[15]
+52V13 Random{integer} 74|20s41[15] 169s50[15]
+61U14 Reset<44|103p14> 74|237s16[15]
 X 12 a-nudira.adb
 53V16 Random[44|86]{integer} 45|402b13[74|15]
 65V16 Random[44|86]{integer} 45|402b13[74|15]
 X 19 a-textio.ads
 58K13*Text_IO 787e16 74|1w10 1r41
-566U14*Put_Line 74|42s10 51s10 75s10 84s10 108s13 112s13
+566U14*Put_Line 74|43s10 52s10 76s10 85s10 117s10 126s10 151s13 155s13
 X 21 interfac.ads
 80M9*Unsigned_32
 83M9*Unsigned_64
@@ -156,46 +156,59 @@ X 50 s-stausa.ads
 207U14*Initialize 208i<c,__gnat_stack_usage_initialize>22
 272U14*Output_Results 276i<c,__gnat_stack_usage_output_results>22
 X 74 tambo.adb
-4U11*Tambo 4b11 166l5 166t10
-9i4 Cantidad_Vacas{integer} 157r24
-10i4 Capacidad_Ordenie{integer} 38r26
-11i4 Capacidad_Vacunas{integer} 71r26
-12i4 Capacidad_Camion{integer} 103r25 103r62 106r23
-14I12 Rango_Azar{integer} 15r60 19r15 125r22
-15K12 Azar_Entero[11|44] 16r23 19r29 125r36 160r4
-16r4 Generador_Global{11|50R9[15]} 19r48 125r55 160r22
-18V13 Tiempo_Aleatorio{duration} 18b13 18>31 22l8 22t24 131s16 135s16 141s16
-. 145s16
-18f31 Max{float} 21r48
-19i7 Valor{14I12} 21r30
-28w14 Ordenie 35b19 55l8 55t15 134r10 136r10 140r10 142r10
-29Y13 Entrar 29>21 37b13 44l11 44t17 134s18 140s18
-29i21 Vaca_Id{integer} 42r46
-30Y13 Salir 30>21 46b13 53l11 53t16 136s18 142s18
-30i21 Vaca_Id{integer} 51r46
-32i7 Ocupacion{integer} 38r14 41r10 41r23 47r14 50r10 50r23
-37i21 Vaca_Id{integer}
-46i20 Vaca_Id{integer}
-61w14 Vacunacion 68b19 88l8 88t18 130r10 132r10 144r10 146r10
-62Y13 Entrar_Vacuna 62>28 70b13 77l11 77t24 130s21 144s21
-62i28 Vaca_Id{integer} 75r46
-63Y13 Salir_Vacuna 63>28 79b13 86l11 86t23 132s21 146s21
-63i28 Vaca_Id{integer} 84r46
-65i7 Ocupacion{integer} 71r14 74r10 74r23 80r14 83r10 83r23
-70i28 Vaca_Id{integer}
-79i27 Vaca_Id{integer}
-94w14 Camiones 101b19 116l8 116t16 149r7
-95Y13 Subir 95>20 102b13 115l11 115t16 149s16
-95i20 Vaca_Id{integer} 108r49 112r49
-97i7 Camion1{integer} 103r15 106r13 107r13 107r24
-98i7 Camion2{integer} 103r52 111r13 111r24
-102i20 Vaca_Id{integer}
-122T14 Vaca 122d20 124b14 150l8 150t12 156r31 163r23
-122i20 Identificador{integer} 130r35 132r34 134r25 136r24 140r25 142r24 144r35
-. 146r34 149r22
-125i7 Valor_Azar{14I12} 126r36
-126b7 Primero_Vacuna{boolean} 128r10
-156P9 Acceso_Vaca(122T14) 157r43
-157a4 Vacas(156P9) 162r13 163m7
-162i8 I{integer} 163r13 163r28
+4U11*Tambo 4b11 243l5 243t10
+9i4 Cantidad_Vacas{integer} 234r24
+10i4 Capacidad_Ordenie{integer} 72r26
+11i4 Capacidad_Vacunas{integer} 106r26 113r26
+12i4 Capacidad_Camion{integer} 146r25 146r62 149r23
+14I12 Rango_Azar{integer} 15r60 20r15 169r24
+15K12 Azar_Entero[11|44] 16r23 20r29 169r38 237r4
+16r4 Generador_Global{11|50R9[15]} 20r48 169r57 237r22
+19V13 Tiempo_Aleatorio{duration} 19b13 19>31 23l8 23t24 182s16 193s16 205s16
+. 217s16
+19f31 Max{float} 22r48
+20i7 Valor{14I12} 22r30
+29w14 Pasillo 36b19 56l8 56t15 177r10 180r10 189r10 191r10 201r10 203r10
+. 212r10 215r10
+30Y13 Entrar 30>21 38b13 45l11 45t17 177s18 189s18 201s18 212s18
+30i21 Vaca_Id{integer} 43r46
+31Y13 Salir 31>21 47b13 54l11 54t16 180s18 191s18 203s18 215s18
+31i21 Vaca_Id{integer} 52r46
+33b7 Ocupado{boolean} 39r18 42r10 48r14 51r10
+38i21 Vaca_Id{integer}
+47i20 Vaca_Id{integer}
+62w14 Ordenie 69b19 89l8 89t15 190r10 195r10 202r10 207r10
+63Y13 Entrar 63>21 71b13 78l11 78t17 190s18 202s18
+63i21 Vaca_Id{integer} 76r46
+64Y13 Salir 64>21 80b13 87l11 87t16 195s18 207s18
+64i21 Vaca_Id{integer} 85r46
+66i7 Ocupacion{integer} 72r14 75r10 75r23 81r14 84r10 84r23
+71i21 Vaca_Id{integer}
+80i20 Vaca_Id{integer}
+95w14 Vacunacion 103b19 130l8 130t18 178r10 179r10 184r10 213r10 214r10 219r10
+96Y13 Solicitar_Entrada 96>32 105b13 110l11 110t28 178s21 213s21
+96i32 Vaca_Id{integer}
+97Y13 Entrar_Vacuna 97>32 112b13 119l11 119t24 179s21 214s21
+97i32 Vaca_Id{integer} 117r46
+98Y13 Salir_Vacuna 98>32 121b13 128l11 128t23 184s21 219s21
+98i32 Vaca_Id{integer} 126r46
+100i7 Ocupacion{integer} 106r14 113r14 116r10 116r23 122r14 125r10 125r23
+105i32 Vaca_Id{integer}
+112i28 Vaca_Id{integer}
+121i27 Vaca_Id{integer}
+136w14 Camiones 143b19 160l8 160t16 225r7
+137Y13 Subir 137>20 145b13 158l11 158t16 225s16
+137i20 Vaca_Id{integer} 151r49 155r49
+139i7 Camion1{integer} 146r15 149r13 150r13 150r24
+140i7 Camion2{integer} 146r52 154r13 154r24
+145i20 Vaca_Id{integer}
+166T14 Vaca 166d20 168b14 227l8 227t12 233r31 240r23
+166i20 Identificador{integer} 177r25 178r39 179r35 180r24 184r34 189r25 190r25
+. 191r24 195r24 201r25 202r25 203r24 207r24 212r25 213r39 214r35 215r24 219r34
+. 225r22
+169i7 Valor_Azar{14I12} 170r36
+170b7 Primero_Vacuna{boolean} 173r10
+233P9 Acceso_Vaca(166T14) 234r43
+234a4 Vacas(233P9) 239r13 240m7
+239i8 I{integer} 240r13 240r28
 

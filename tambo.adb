@@ -15,6 +15,7 @@ procedure Tambo is
    package Azar_Entero is new Ada.Numerics.Discrete_Random(Rango_Azar);
    Generador_Global : Azar_Entero.Generator;
 
+
    function Tiempo_Aleatorio (Max : Float) return Duration is
       Valor : Rango_Azar := Azar_Entero.Random(Generador_Global);
    begin
@@ -23,7 +24,40 @@ procedure Tambo is
 
 
    -----------------------------------------------------------------------
-   -- ÁREA DE ORDEÑE
+   -- PASILLO (solo puede entrar UNA vaca a la vez)
+   -----------------------------------------------------------------------
+   protected Pasillo is
+      entry Entrar (Vaca_Id : Integer);
+      entry Salir  (Vaca_Id : Integer);
+   private
+      Ocupado : Boolean := False;
+   end Pasillo;
+
+   protected body Pasillo is
+
+      entry Entrar (Vaca_Id : Integer)
+        when not Ocupado
+      is
+      begin
+         Ocupado := True;
+         Put_Line ("La vaca" & Integer'Image(Vaca_Id) &
+                   " está entrando al pasillo");
+      end Entrar;
+
+      entry Salir (Vaca_Id : Integer)
+        when Ocupado
+      is
+      begin
+         Ocupado := False;
+         Put_Line ("La vaca" & Integer'Image(Vaca_Id) &
+                   " está saliendo del pasillo");
+      end Salir;
+
+   end Pasillo;
+
+
+   -----------------------------------------------------------------------
+   -- ÁREA DE ORDEÑE (máx 15 vacas)
    -----------------------------------------------------------------------
    protected Ordenie is
       entry Entrar (Vaca_Id : Integer);
@@ -56,16 +90,24 @@ procedure Tambo is
 
 
    -----------------------------------------------------------------------
-   -- ÁREA DE VACUNACIÓN
+   -- ÁREA DE VACUNACIÓN (máx 5 vacas - FIFO de mangas)
    -----------------------------------------------------------------------
    protected Vacunacion is
-      entry Entrar_Vacuna (Vaca_Id : Integer);
-      entry Salir_Vacuna  (Vaca_Id : Integer);
+      entry Solicitar_Entrada (Vaca_Id : Integer);
+      entry Entrar_Vacuna     (Vaca_Id : Integer);
+      entry Salir_Vacuna      (Vaca_Id : Integer);
    private
       Ocupacion : Integer := 0;
    end Vacunacion;
 
    protected body Vacunacion is
+
+      entry Solicitar_Entrada (Vaca_Id : Integer)
+        when Ocupacion < Capacidad_Vacunas
+      is
+      begin
+         null;
+      end Solicitar_Entrada;
 
       entry Entrar_Vacuna (Vaca_Id : Integer)
         when Ocupacion < Capacidad_Vacunas
@@ -89,7 +131,7 @@ procedure Tambo is
 
 
    -----------------------------------------------------------------------
-   -- CAMIONES (PRODUCTOR–CONSUMIDOR)
+   -- CAMIONES (se llenan 50 y 50)
    -----------------------------------------------------------------------
    protected Camiones is
       entry Subir (Vaca_Id : Integer);
@@ -99,6 +141,7 @@ procedure Tambo is
    end Camiones;
 
    protected body Camiones is
+
       entry Subir (Vaca_Id : Integer)
         when (Camion1 < Capacidad_Camion) or else (Camion2 < Capacidad_Camion)
       is
@@ -113,6 +156,7 @@ procedure Tambo is
                       " está subiendo al Camión 2");
          end if;
       end Subir;
+
    end Camiones;
 
 
@@ -122,36 +166,69 @@ procedure Tambo is
    task type Vaca (Identificador : Integer);
 
    task body Vaca is
-      Valor_Azar   : Rango_Azar := Azar_Entero.Random(Generador_Global);
+      Valor_Azar     : Rango_Azar := Azar_Entero.Random(Generador_Global);
       Primero_Vacuna : Boolean := (Valor_Azar mod 2 = 0);
    begin
+
       if Primero_Vacuna then
-         -- VACUNACIÓN PRIMERO
+         ------------------------------------------------------------------
+         -- PASILLO → VACUNACIÓN
+         ------------------------------------------------------------------
+         Pasillo.Entrar(Identificador);
+         Vacunacion.Solicitar_Entrada(Identificador);
          Vacunacion.Entrar_Vacuna(Identificador);
+         Pasillo.Salir(Identificador);
+
          delay Tiempo_Aleatorio(2.0);
+
          Vacunacion.Salir_Vacuna(Identificador);
 
+         ------------------------------------------------------------------
+         -- PASILLO → ORDEÑE
+         ------------------------------------------------------------------
+         Pasillo.Entrar(Identificador);
          Ordenie.Entrar(Identificador);
+         Pasillo.Salir(Identificador);
+
          delay Tiempo_Aleatorio(3.0);
+
          Ordenie.Salir(Identificador);
 
       else
-         -- ORDEÑE PRIMERO
+         ------------------------------------------------------------------
+         -- PASILLO → ORDEÑE
+         ------------------------------------------------------------------
+         Pasillo.Entrar(Identificador);
          Ordenie.Entrar(Identificador);
+         Pasillo.Salir(Identificador);
+
          delay Tiempo_Aleatorio(3.0);
+
          Ordenie.Salir(Identificador);
 
+         ------------------------------------------------------------------
+         -- PASILLO → VACUNACIÓN
+         ------------------------------------------------------------------
+         Pasillo.Entrar(Identificador);
+         Vacunacion.Solicitar_Entrada(Identificador);
          Vacunacion.Entrar_Vacuna(Identificador);
+         Pasillo.Salir(Identificador);
+
          delay Tiempo_Aleatorio(2.0);
+
          Vacunacion.Salir_Vacuna(Identificador);
       end if;
 
+      ------------------------------------------------------------------
+      -- SUBIR AL CAMIÓN
+      ------------------------------------------------------------------
       Camiones.Subir(Identificador);
+
    end Vaca;
 
 
    -----------------------------------------------------------------------
-   -- CREACIÓN DE VACAS
+   -- CREACIÓN DE LAS 100 VACAS
    -----------------------------------------------------------------------
    type Acceso_Vaca is access Vaca;
    Vacas : array (1 .. Cantidad_Vacas) of Acceso_Vaca;
