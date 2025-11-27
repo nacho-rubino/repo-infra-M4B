@@ -3,9 +3,8 @@ with Ada.Numerics.Discrete_Random;
 
 procedure Tambo is
 
-   -----------------------------------------------------------------------
-   -- CONFIGURACIÓN GENERAL
-   -----------------------------------------------------------------------
+   -- Configuracion
+
    Cantidad_Vacas     : constant Integer := 100;
    Capacidad_Ordenie  : constant Integer := 15;
    Capacidad_Vacunas  : constant Integer := 5;
@@ -23,9 +22,8 @@ procedure Tambo is
    end Tiempo_Aleatorio;
 
 
-   -----------------------------------------------------------------------
-   -- PASILLO (solo puede entrar UNA vaca a la vez)
-   -----------------------------------------------------------------------
+   -- pasillo (UNA vaca a la vez)
+
    protected Pasillo is
       entry Entrar (Vaca_Id : Integer);
       entry Salir  (Vaca_Id : Integer);
@@ -56,9 +54,7 @@ procedure Tambo is
    end Pasillo;
 
 
-   -----------------------------------------------------------------------
-   -- ÁREA DE ORDEÑE (máx 15 vacas)
-   -----------------------------------------------------------------------
+   -- Area de ordenie (max 15 vacas)
    protected Ordenie is
       entry Entrar (Vaca_Id : Integer);
       entry Salir  (Vaca_Id : Integer);
@@ -89,9 +85,9 @@ procedure Tambo is
    end Ordenie;
 
 
-   -----------------------------------------------------------------------
-   -- ÁREA DE VACUNACIÓN (máx 5 vacas - FIFO de mangas)
-   -----------------------------------------------------------------------
+   -- Area de vac (máx 5 vacas - FIFO de mangas)
+
+
    protected Vacunacion is
       entry Solicitar_Entrada (Vaca_Id : Integer);
       entry Entrar_Vacuna     (Vaca_Id : Integer);
@@ -130,9 +126,8 @@ procedure Tambo is
    end Vacunacion;
 
 
-   -----------------------------------------------------------------------
-   -- CAMIONES (se llenan 50 y 50)
-   -----------------------------------------------------------------------
+   -- Camiones
+
    protected Camiones is
       entry Subir (Vaca_Id : Integer);
    private
@@ -160,9 +155,10 @@ procedure Tambo is
    end Camiones;
 
 
-   -----------------------------------------------------------------------
-   -- TAREA VACA
-   -----------------------------------------------------------------------
+   -- Task VACA!!!!
+   -- acaaaaaaaaaaaa
+
+
    task type Vaca (Identificador : Integer);
 
    task body Vaca is
@@ -171,9 +167,7 @@ procedure Tambo is
    begin
 
       if Primero_Vacuna then
-         ------------------------------------------------------------------
-         -- PASILLO → VACUNACIÓN
-         ------------------------------------------------------------------
+         -- Pasillo - Vac
          Pasillo.Entrar(Identificador);
          Vacunacion.Solicitar_Entrada(Identificador);
          Vacunacion.Entrar_Vacuna(Identificador);
@@ -183,9 +177,8 @@ procedure Tambo is
 
          Vacunacion.Salir_Vacuna(Identificador);
 
-         ------------------------------------------------------------------
-         -- PASILLO → ORDEÑE
-         ------------------------------------------------------------------
+         -- pasillo - Ordenie
+
          Pasillo.Entrar(Identificador);
          Ordenie.Entrar(Identificador);
          Pasillo.Salir(Identificador);
@@ -195,9 +188,8 @@ procedure Tambo is
          Ordenie.Salir(Identificador);
 
       else
-         ------------------------------------------------------------------
-         -- PASILLO → ORDEÑE
-         ------------------------------------------------------------------
+         -- Pasillo - Ordenie
+
          Pasillo.Entrar(Identificador);
          Ordenie.Entrar(Identificador);
          Pasillo.Salir(Identificador);
@@ -206,9 +198,8 @@ procedure Tambo is
 
          Ordenie.Salir(Identificador);
 
-         ------------------------------------------------------------------
-         -- PASILLO → VACUNACIÓN
-         ------------------------------------------------------------------
+         -- PASILLO - VACUNACIÓN
+
          Pasillo.Entrar(Identificador);
          Vacunacion.Solicitar_Entrada(Identificador);
          Vacunacion.Entrar_Vacuna(Identificador);
@@ -219,17 +210,15 @@ procedure Tambo is
          Vacunacion.Salir_Vacuna(Identificador);
       end if;
 
-      ------------------------------------------------------------------
-      -- SUBIR AL CAMIÓN
-      ------------------------------------------------------------------
+      -- Subir camion
+
       Camiones.Subir(Identificador);
 
    end Vaca;
 
 
-   -----------------------------------------------------------------------
-   -- CREACIÓN DE LAS 100 VACAS
-   -----------------------------------------------------------------------
+   -- Crear 100  vacas
+
    type Acceso_Vaca is access Vaca;
    Vacas : array (1 .. Cantidad_Vacas) of Acceso_Vaca;
 
