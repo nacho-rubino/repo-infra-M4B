@@ -1,8 +1,5 @@
-// Script principal para la aplicación ToDo List con temática de Sistemas Operativos
 
-// Inicializar la aplicación cuando el DOM esté cargado
 document.addEventListener('DOMContentLoaded', function() {
-    // Referencias a los elementos del DOM
     const taskTableBody = document.getElementById('taskTableBody');
     const taskSearch = document.getElementById('taskSearch');
     const saveNewTaskBtn = document.getElementById('saveNewTask');
@@ -10,13 +7,12 @@ document.addEventListener('DOMContentLoaded', function() {
     const confirmDeleteBtn = document.getElementById('confirmDelete');
     const filterStatusLinks = document.querySelectorAll('.filter-status');
 
-    // Toast para notificaciones
     const taskToast = document.getElementById('taskToast');
     const toast = new bootstrap.Toast(taskToast);
     const toastTitle = document.getElementById('toastTitle');
     const toastMessage = document.getElementById('toastMessage');
 
-    // Función para mostrar notificación
+
     function showNotification(title, message, type = 'success') {
         toastTitle.textContent = title;
         toastMessage.textContent = message;
@@ -34,7 +30,6 @@ document.addEventListener('DOMContentLoaded', function() {
         toast.show();
     }
 
-    // Función para agregar una nueva tarea
     saveNewTaskBtn.addEventListener('click', function() {
         const title = document.getElementById('taskTitle').value;
         const description = document.getElementById('taskDescription').value;
@@ -46,10 +41,10 @@ document.addEventListener('DOMContentLoaded', function() {
             return;
         }
         
-        // Simular un proceso de sistema operativo
+ 
         showNotification('Procesando', 'Iniciando proceso de creación de tarea...', 'warning');
         
-        // Llamada a la API
+        
         fetch('/api/tasks', {
             method: 'POST',
             headers: {
@@ -69,17 +64,17 @@ document.addEventListener('DOMContentLoaded', function() {
             return response.json();
         })
         .then(data => {
-            // Cerrar el modal
+
             const modal = bootstrap.Modal.getInstance(document.getElementById('newTaskModal'));
             modal.hide();
             
-            // Limpiar el formulario
+
             document.getElementById('newTaskForm').reset();
             
-            // Mostrar notificación de éxito
+
             showNotification('Éxito', 'Tarea creada correctamente', 'success');
             
-            // Recargar la página para mostrar la nueva tarea
+
             setTimeout(() => {
                 window.location.reload();
             }, 1000);
@@ -90,9 +85,9 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     });
 
-    // Evento para editar una tarea
+
     taskTableBody.addEventListener('click', function(e) {
-        // Si se hace clic en el botón de editar
+
         if (e.target.closest('.edit-task')) {
             const row = e.target.closest('tr');
             const taskId = row.dataset.id;
@@ -125,7 +120,7 @@ document.addEventListener('DOMContentLoaded', function() {
                 status = 'completada';
             }
             
-            // Llenar el formulario de edición
+
             document.getElementById('editTaskId').value = taskId;
             document.getElementById('editTaskTitle').value = title;
             document.getElementById('editTaskDescription').value = description;
@@ -134,19 +129,19 @@ document.addEventListener('DOMContentLoaded', function() {
             document.getElementById('editTaskStatus').value = status;
         }
         
-        // Si se hace clic en el botón de eliminar
+
         if (e.target.closest('.delete-task')) {
             const row = e.target.closest('tr');
             const taskId = row.dataset.id;
             document.getElementById('deleteTaskId').value = taskId;
             
-            // Mostrar modal de confirmación
+
             const confirmDeleteModal = new bootstrap.Modal(document.getElementById('confirmDeleteModal'));
             confirmDeleteModal.show();
         }
     });
 
-    // Evento para guardar cambios en una tarea
+
     saveEditTaskBtn.addEventListener('click', function() {
         const taskId = document.getElementById('editTaskId').value;
         const title = document.getElementById('editTaskTitle').value;
@@ -160,10 +155,10 @@ document.addEventListener('DOMContentLoaded', function() {
             return;
         }
         
-        // Simular un proceso de sistema operativo
+
         showNotification('Procesando', 'Actualizando tarea en memoria...', 'warning');
         
-        // Llamada a la API
+       
         fetch(`/api/tasks/${taskId}`, {
             method: 'PUT',
             headers: {
@@ -184,14 +179,14 @@ document.addEventListener('DOMContentLoaded', function() {
             return response.json();
         })
         .then(data => {
-            // Cerrar el modal
+
             const modal = bootstrap.Modal.getInstance(document.getElementById('editTaskModal'));
             modal.hide();
             
-            // Mostrar notificación de éxito
+
             showNotification('Éxito', 'Tarea actualizada correctamente', 'success');
             
-            // Recargar la página para mostrar los cambios
+
             setTimeout(() => {
                 window.location.reload();
             }, 1000);
@@ -202,14 +197,12 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     });
 
-    // Evento para confirmar eliminación de una tarea
+ 
     confirmDeleteBtn.addEventListener('click', function() {
         const taskId = document.getElementById('deleteTaskId').value;
-        
-        // Simular un proceso de sistema operativo
+
         showNotification('Procesando', 'Liberando espacio de memoria...', 'warning');
         
-        // Llamada a la API
         fetch(`/api/tasks/${taskId}`, {
             method: 'DELETE',
         })
@@ -220,14 +213,13 @@ document.addEventListener('DOMContentLoaded', function() {
             return response.json();
         })
         .then(data => {
-            // Cerrar el modal
+           
             const modal = bootstrap.Modal.getInstance(document.getElementById('confirmDeleteModal'));
             modal.hide();
             
-            // Mostrar notificación de éxito
+           
             showNotification('Éxito', 'Tarea eliminada correctamente', 'success');
-            
-            // Recargar la página para actualizar la lista
+         
             setTimeout(() => {
                 window.location.reload();
             }, 1000);
@@ -238,7 +230,6 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     });
 
-    // Evento para buscar tareas
     taskSearch.addEventListener('keyup', function() {
         const searchTerm = this.value.toLowerCase();
         const rows = taskTableBody.querySelectorAll('tr');
@@ -255,7 +246,7 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     });
 
-    // Evento para filtrar por estado
+
     filterStatusLinks.forEach(link => {
         link.addEventListener('click', function(e) {
             e.preventDefault();
@@ -270,12 +261,12 @@ document.addEventListener('DOMContentLoaded', function() {
                 }
             });
             
-            // Actualizar texto del botón de filtro
+    
             document.getElementById('filterDropdown').innerHTML = `<i class="bi bi-funnel"></i> ${this.textContent}`;
         });
     });
 
-    // Cambiar estado al hacer clic en el badge de estado
+
     taskTableBody.addEventListener('click', function(e) {
         if (e.target.classList.contains('status-badge')) {
             const row = e.target.closest('tr');
@@ -283,7 +274,7 @@ document.addEventListener('DOMContentLoaded', function() {
             let currentStatus = row.dataset.status;
             let newStatus;
             
-            // Ciclar por los estados
+
             if (currentStatus === 'pendiente') {
                 newStatus = 'en-progreso';
             } else if (currentStatus === 'en-progreso') {
@@ -291,8 +282,7 @@ document.addEventListener('DOMContentLoaded', function() {
             } else {
                 newStatus = 'pendiente';
             }
-            
-            // Actualizar la tarea
+
             fetch(`/api/tasks/${taskId}`, {
                 method: 'PUT',
                 headers: {
@@ -309,13 +299,10 @@ document.addEventListener('DOMContentLoaded', function() {
                 return response.json();
             })
             .then(data => {
-                // Mostrar notificación de éxito
                 showNotification('Estado actualizado', `Tarea marcada como ${newStatus}`, 'success');
-                
-                // Actualizar la vista
+
                 row.dataset.status = newStatus;
-                
-                // Actualizar el badge
+
                 const badge = e.target;
                 badge.className = 'badge status-badge';
                 
@@ -337,28 +324,27 @@ document.addEventListener('DOMContentLoaded', function() {
         }
     });
 
-    // Efectos visuales de "sistema operativo"
-    // Simular carga de recursos
+  
     setTimeout(function() {
         showNotification('Sistema', 'Recursos cargados correctamente', 'success');
     }, 1000);
     
-    // Obtener estadísticas del sistema periódicamente
     setInterval(function() {
         fetch('/api/system-info')
             .then(response => response.json())
             .then(data => {
-                // Actualizar información de memoria en tiempo real si se desea
+
                 console.log('Estadísticas del sistema actualizadas:', data);
             })
             .catch(error => {
                 console.error('Error al obtener estadísticas:', error);
             });
-    }, 30000); // Cada 30 segundos
+    }, 30000);
 });
 
-// Función para formatear fechas
+
 function formatDate(dateString) {
     const options = { year: 'numeric', month: 'short', day: 'numeric', hour: '2-digit', minute: '2-digit' };
     return new Date(dateString).toLocaleDateString(undefined, options);
 }
+
