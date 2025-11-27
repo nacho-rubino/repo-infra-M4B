@@ -226,6 +226,5 @@ begin
       exit when Camiones.Total = Cantidad_Vacas;
       delay 0.05;
    end loop;
-
-   Log.P("Simulacion finalizada: total vacas = " & Integer'Image(Camiones.Total));
+   
 end Tambo;
