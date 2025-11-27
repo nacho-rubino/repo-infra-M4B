@@ -6,16 +6,14 @@ with Ada.Real_Time;              use Ada.Real_Time;
 
 procedure Tambo is
 
-   -- Random
-
    package Rand_Int is new Ada.Numerics.Discrete_Random (Integer);
 
-   function Rand_Delay (Max : Integer; Local_Gen : Rand_Int.Generator) return Duration is
+   function Rand_Delay (Max : Integer; Local_Gen : Rand_Int.Generator)
+     return Duration
+   is
    begin
       return Duration (Float (Rand_Int.Random (Local_Gen) mod Max + 1));
    end Rand_Delay;
-
-   -- Area de ordenie (15 vacas de capacidad)
 
    protected Ordene is
       entry Entrar;
@@ -36,9 +34,7 @@ procedure Tambo is
       end Salir;
    end Ordene;
 
-
-   -- Pasillo (1 vaca)
-
+   protected Pasillo is
       entry Entrar;
       procedure Salir;
    private
@@ -56,9 +52,6 @@ procedure Tambo is
          Libre := True;
       end Salir;
    end Pasillo;
-
-
-   -- Mangas (5 vacas)
 
    protected Mangas is
       entry Entrar;
@@ -79,9 +72,6 @@ procedure Tambo is
       end Salir;
    end Mangas;
 
-
-   -- Camiones
-
    protected Camiones is
       entry Subir (V : Integer);
       function Llenos return Boolean;
@@ -91,15 +81,16 @@ procedure Tambo is
    end Camiones;
 
    protected body Camiones is
-
       entry Subir (V : Integer) when (C1 < 50 or C2 < 50) is
       begin
          if C1 < 50 then
             C1 := C1 + 1;
-            Put_Line ("Camión 1: sube vaca " & Integer'Image(V));
+            Put_Line ("Camión 1: sube vaca" & Integer'Image(V));
+            Ada.Text_IO.Flush;------------------------------------------------------------------------
          else
             C2 := C2 + 1;
-            Put_Line ("Camión 2: sube vaca " & Integer'Image(V));
+            Put_Line ("Camión 2: sube vaca" & Integer'Image(V));
+            Ada.Text_IO.Flush;
          end if;
       end Subir;
 
@@ -107,30 +98,25 @@ procedure Tambo is
       begin
          return C1 = 50 and C2 = 50;
       end Llenos;
-
    end Camiones;
 
-   -- Task Vaca
    task type Vaca (ID : Integer);
 
    task body Vaca is
       Local_Gen : Rand_Int.Generator;
       Orden     : Integer;
    begin
-      -- Inicializar random por cada task
-      Rand_Int.Reset(Local_Gen, Integer(ID)*17 + 12345);
+      Rand_Int.Reset(Local_Gen, ID * 17 + 54321);
 
       Orden := Rand_Int.Random(Local_Gen) mod 2;
 
       if Orden = 0 then
-         -- ORDENIAR PRIMERO
          Put_Line ("Vaca" & Integer'Image(ID) & " entra a Ordene");
          Ordene.Entrar;
          delay Rand_Delay(3, Local_Gen);
          Put_Line ("Vaca" & Integer'Image(ID) & " sale de Ordene");
          Ordene.Salir;
 
-         -- VACUNACIÓN!! acaaaaaaa
          Put_Line ("Vaca" & Integer'Image(ID) & " entra a Vacunación");
          Pasillo.Entrar;
          Mangas.Entrar;
@@ -145,7 +131,6 @@ procedure Tambo is
          Put_Line ("Vaca" & Integer'Image(ID) & " sale de Vacunación");
 
       else
-         -- VACUNACIÓN PRIMERO
          Put_Line ("Vaca" & Integer'Image(ID) & " entra a Vacunación");
          Pasillo.Entrar;
          Mangas.Entrar;
@@ -159,7 +144,6 @@ procedure Tambo is
 
          Put_Line ("Vaca" & Integer'Image(ID) & " sale de Vacunación");
 
-         -- ORDEÑE
          Put_Line ("Vaca" & Integer'Image(ID) & " entra a Ordene");
          Ordene.Entrar;
          delay Rand_Delay(3, Local_Gen);
@@ -168,16 +152,8 @@ procedure Tambo is
       end if;
 
       Camiones.Subir(ID);
-
-   exception
-      when others =>
-         Put_Line ("ERROR en vaca" & Integer'Image(ID));
    end Vaca;
 
-
-   --------------------------------------------------------------------
-   -- CREAR 100 VACAS
-   --------------------------------------------------------------------
    type Vaca_Access is access Vaca;
    Vacas : array (1 .. 100) of Vaca_Access;
 
@@ -190,7 +166,7 @@ begin
 
    loop
       exit when Camiones.Llenos;
-      delay 0.3;
+      delay 0.2;
    end loop;
 
    Put_Line ("=======================================");
