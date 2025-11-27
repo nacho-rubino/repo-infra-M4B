@@ -5,7 +5,9 @@ P SS ZX
 RN
 RV SIMPLE_BARRIERS
 RV NO_ALLOCATORS
+RV NO_CALENDAR
 RV NO_DELAY
+RV NO_DIRECT_BOOLEAN_OPERATORS
 RV NO_EXCEPTION_HANDLERS
 RV NO_EXCEPTION_PROPAGATION
 RV NO_EXCEPTIONS
@@ -32,16 +34,19 @@ RV MAX_PROTECTED_ENTRIES=2
 RV MAX_TASKS=1+
 RV MAX_ENTRY_QUEUE_LENGTH=1+
 
-U tambo%b		tambo.adb		50d4cfda NE OO SU
+U tambo%b		tambo.adb		069e029f NE OO SU
 W ada%s			ada.ads			ada.ali
+W ada.calendar%s	a-calend.adb		a-calend.ali
 Z ada.calendar.delays%s	a-caldel.adb		a-caldel.ali
 Z ada.exceptions%s	a-except.adb		a-except.ali
+W ada.integer_text_io%s	a-inteio.ads		a-inteio.ali
 W ada.numerics%s	a-numeri.ads		a-numeri.ali
 W ada.numerics.discrete_random%s
-Z ada.real_time%s	a-reatim.adb		a-reatim.ali
+W ada.real_time%s	a-reatim.adb		a-reatim.ali
 Z ada.strings.text_buffers%s  a-sttebu.adb	a-sttebu.ali
 W ada.text_io%s		a-textio.adb		a-textio.ali
-W system%s		system.ads		system.ali
+Z system%s		system.ads		system.ali
+Z system.concat_2%s	s-conca2.adb		s-conca2.ali
 Z system.concat_3%s	s-conca3.adb		s-conca3.ali
 Z system.img_int%s	s-imgint.ads		s-imgint.ali
 Z system.parameters%s	s-parame.adb		s-parame.ali
@@ -61,6 +66,7 @@ D a-calend.ads		20240904144414 e6961b4c ada.calendar%s
 D a-caldel.ads		20240521074737 9f20b83d ada.calendar.delays%s
 D a-except.ads		20240521074738 2a7d8d70 ada.exceptions%s
 D a-finali.ads		20240521074738 bf4f806b ada.finalization%s
+D a-inteio.ads		20240521074738 f64b89a4 ada.integer_text_io%s
 D a-ioexce.ads		20240521074738 40018c65 ada.io_exceptions%s
 D a-numeri.ads		20240521074738 84bea7a3 ada.numerics%s
 D a-nubinu.ads		20240521074738 93f1f3d1 ada.numerics.big_numbers%s
@@ -74,6 +80,7 @@ D a-sttebu.ads		20240521074738 f1ad67a2 ada.strings.text_buffers%s
 D a-stuten.ads		20240521074738 c6ced0ae ada.strings.utf_encoding%s
 D a-tags.ads		20240521074738 9eaa38c6 ada.tags%s
 D a-textio.ads		20240521074738 5c2c6153 ada.text_io%s
+D a-tiinio.ads		20240521074738 e58fa6fb ada.text_io.integer_io%s
 D a-unccon.ads		20240521074738 0e9b276f ada.unchecked_conversion%s
 D interfac.ads		20240521074738 15f799c2 interfaces%s
 D i-c.ads		20240521074738 5c5a6c17 interfaces.c%s
@@ -83,6 +90,7 @@ D s-atacco.ads		20240521074738 903317eb system.address_to_access_conversions%s
 D s-assert.ads		20240521074738 9c4520c7 system.assertions%s
 D s-c_time.ads		20240904144414 535885c5 system.c_time%s
 D s-casuti.ads		20240521074738 cf13d755 system.case_util%s
+D s-conca2.ads		20240521074738 b5fb73f7 system.concat_2%s
 D s-conca3.ads		20240521074738 8a7a19a2 system.concat_3%s
 D s-crtl.ads		20240521074738 8a0692f8 system.crtl%s
 D s-exctab.ads		20240521074738 91bef6ef system.exception_table%s
@@ -128,87 +136,97 @@ D s-vauspe.ads		20240521074738 a67b2f28 system.value_u_spec%s
 D s-wchcon.ads		20240521074738 d9032363 system.wch_con%s
 D s-widuns.ads		20240521074738 866a5800 system.wid_uns%s
 D s-widthu.ads		20240521074738 b32f15e2 system.width_u%s
-D tambo.adb		20251127211244 557c717a tambo%b
+D tambo.adb		20251127212706 ab713e14 tambo%b
 G a e
-G c Z b b [tambo standard 4 11 none]
+G c Z b b [tambo standard 7 11 none]
 X 1 ada.ads
-16K9*Ada 20e8 74|1r6 1r37 2r6 15r31
-X 8 a-numeri.ads
-16K13*Numerics 35e17 74|2r10 15r35
-X 11 a-nudira.ads
-44k22*Discrete_Random 81e33 74|2w19 15r44
-50R9 Generator<44|65R9> 74|16r35[15]
-52V13 Random{integer} 74|20s41[15] 169s50[15]
-61U14 Reset<44|103p14> 74|237s16[15]
-X 12 a-nudira.adb
-53V16 Random[44|86]{integer} 45|402b13[74|15]
-65V16 Random[44|86]{integer} 45|402b13[74|15]
-X 19 a-textio.ads
-58K13*Text_IO 787e16 74|1w10 1r41
-566U14*Put_Line 74|43s10 52s10 76s10 85s10 117s10 126s10 151s13 155s13
-X 21 interfac.ads
+16K9*Ada 20e8 77|1r6 1r33 2r6 3r6 3r32 4r6 5r6 5r32 167r28
+X 3 a-calend.ads
+36K13*Calendar 402e17 77|4w10
+X 7 a-inteio.ads
+18K13*Integer_Text_IO[21|46] 77|3w10 3r36
+X 9 a-numeri.ads
+16K13*Numerics 35e17 77|2r10 167r32
+X 12 a-nudira.ads
+44k22*Discrete_Random 81e33 77|2w19 167r41
+50R9 Generator<47|65R9> 77|168r19[167]
+52V13 Random{integer} 77|171s34[167] 183s34[167]
+61U14 Reset<47|103p14> 77|239s13[167]
+X 13 a-nudira.adb
+53V16 Random[47|86]{integer} 48|402b13[77|167]
+65V16 Random[47|86]{integer} 48|402b13[77|167]
+X 14 a-reatim.ads
+39K13*Real_Time 186e18 77|5w10 5r36
+X 20 a-textio.ads
+58K13*Text_IO 787e16 77|1w10 1r37
+566U14*Put_Line 77|27s10
+X 23 interfac.ads
 80M9*Unsigned_32
 83M9*Unsigned_64
-X 44 s-rannum.ads
-77V13*Random{21|80M9} 45|224i21
-78V13*Random{21|83M9} 45|224i21
-X 50 s-stausa.ads
+X 47 s-rannum.ads
+77V13*Random{23|80M9} 48|224i21
+78V13*Random{23|83M9} 48|224i21
+X 53 s-stausa.ads
 207U14*Initialize 208i<c,__gnat_stack_usage_initialize>22
 272U14*Output_Results 276i<c,__gnat_stack_usage_output_results>22
-X 74 tambo.adb
-4U11*Tambo 4b11 243l5 243t10
-9i4 Cantidad_Vacas{integer} 234r24
-10i4 Capacidad_Ordenie{integer} 72r26
-11i4 Capacidad_Vacunas{integer} 106r26 113r26
-12i4 Capacidad_Camion{integer} 146r25 146r62 149r23
-14I12 Rango_Azar{integer} 15r60 20r15 169r24
-15K12 Azar_Entero[11|44] 16r23 20r29 169r38 237r4
-16r4 Generador_Global{11|50R9[15]} 20r48 169r57 237r22
-19V13 Tiempo_Aleatorio{duration} 19b13 19>31 23l8 23t24 182s16 193s16 205s16
-. 217s16
-19f31 Max{float} 22r48
-20i7 Valor{14I12} 22r30
-29w14 Pasillo 36b19 56l8 56t15 177r10 180r10 189r10 191r10 201r10 203r10
-. 212r10 215r10
-30Y13 Entrar 30>21 38b13 45l11 45t17 177s18 189s18 201s18 212s18
-30i21 Vaca_Id{integer} 43r46
-31Y13 Salir 31>21 47b13 54l11 54t16 180s18 191s18 203s18 215s18
-31i21 Vaca_Id{integer} 52r46
-33b7 Ocupado{boolean} 39r18 42r10 48r14 51r10
-38i21 Vaca_Id{integer}
-47i20 Vaca_Id{integer}
-62w14 Ordenie 69b19 89l8 89t15 190r10 195r10 202r10 207r10
-63Y13 Entrar 63>21 71b13 78l11 78t17 190s18 202s18
-63i21 Vaca_Id{integer} 76r46
-64Y13 Salir 64>21 80b13 87l11 87t16 195s18 207s18
-64i21 Vaca_Id{integer} 85r46
-66i7 Ocupacion{integer} 72r14 75r10 75r23 81r14 84r10 84r23
-71i21 Vaca_Id{integer}
-80i20 Vaca_Id{integer}
-95w14 Vacunacion 103b19 130l8 130t18 178r10 179r10 184r10 213r10 214r10 219r10
-96Y13 Solicitar_Entrada 96>32 105b13 110l11 110t28 178s21 213s21
-96i32 Vaca_Id{integer}
-97Y13 Entrar_Vacuna 97>32 112b13 119l11 119t24 179s21 214s21
-97i32 Vaca_Id{integer} 117r46
-98Y13 Salir_Vacuna 98>32 121b13 128l11 128t23 184s21 219s21
-98i32 Vaca_Id{integer} 126r46
-100i7 Ocupacion{integer} 106r14 113r14 116r10 116r23 122r14 125r10 125r23
-105i32 Vaca_Id{integer}
-112i28 Vaca_Id{integer}
-121i27 Vaca_Id{integer}
-136w14 Camiones 143b19 160l8 160t16 225r7
-137Y13 Subir 137>20 145b13 158l11 158t16 225s16
-137i20 Vaca_Id{integer} 151r49 155r49
-139i7 Camion1{integer} 146r15 149r13 150r13 150r24
-140i7 Camion2{integer} 146r52 154r13 154r24
-145i20 Vaca_Id{integer}
-166T14 Vaca 166d20 168b14 227l8 227t12 233r31 240r23
-166i20 Identificador{integer} 177r25 178r39 179r35 180r24 184r34 189r25 190r25
-. 191r24 195r24 201r25 202r25 203r24 207r24 212r25 213r39 214r35 215r24 219r34
-. 225r22
-169i7 Valor_Azar{14I12} 170r36
-170b7 Primero_Vacuna{boolean} 173r10
-233P9 Acceso_Vaca(166T14) 234r43
-234a4 Vacas(233P9) 239r13 240m7
-239i8 I{integer} 240r13 240r28
+X 77 tambo.adb
+7U11*Tambo 7b11 255l5 255t10
+11i4 Num_Cows{positive} 235r23 249r37
+12i4 Cap_Milking{positive} 77r22
+13i4 Cap_Vacc{positive} 111r22
+14i4 Cap_Truck{positive} 145r20 145r40 148r18
+19w14 Log 24b19 29l8 29t11 51r10 60r10 81r10 89r10 115r10 123r10 150r13 153r13
+. 253r4
+20U17 Print 20>24 25b17 28l11 28t16 51s14 60s14 81s14 89s14 115s14 123s14
+. 150s17 153s17 253s8
+20a24 S{string} 25b24 27r20
+38w14 Pasillo 45b19 62l8 62t15 189r10 192r10 200r10 202r10 210r10 212r10
+. 218r10 220r10
+39Y13 Enter_Pasillo 39>28 46b13 52l11 52t24 189s18 200s18 210s18 218s18
+39i28 Id{positive} 51r34
+40Y13 Leave_Pasillo 40>28 54b13 61l11 61t24 192s18 202s18 212s18 220s18
+40i28 Id{positive} 60r34
+42b7 Busy{boolean} 47r18 50r10 55r14 59r10
+46i28 Id{positive}
+54i28 Id{positive}
+67w14 Milking 75b19 96l8 96t15 204r10 206r10 214r10 216r10
+68Y13 Enter_Milking 68>28 76b13 82l11 82t24 204s18 214s18
+68i28 Id{positive} 81r34
+69Y13 Leave_Milking 69>28 84b13 90l11 90t24 206s18 216s18
+69i28 Id{positive} 89r34
+70V16 Occupied{integer} 92b16 95l11 95t19
+72i7 Count{integer} 77r14 80r10 80r19 85r14 88r10 88r19 94r17
+76i28 Id{positive}
+84i28 Id{positive}
+101w14 Vaccination 109b19 130l8 130t19 195r10 197r10 222r10 224r10
+102Y13 Enter_Vacc 102>25 110b13 116l11 116t21 195s22 222s22
+102i25 Id{positive} 115r34
+103Y13 Leave_Vacc 103>25 118b13 124l11 124t21 197s22 224s22
+103i25 Id{positive} 123r34
+104V16 Occupied{integer} 126b16 129l11 129t19
+106i7 Count{integer} 111r14 114r10 114r19 119r14 122r10 122r19 128r17
+110i25 Id{positive}
+118i25 Id{positive}
+135w14 Trucks 143b19 161l8 161t14 228r7 249r17 254r30
+136Y13 Board 136>20 144b13 155l11 155t16 228s14
+136i20 Id{positive} 150r37 153r37
+137V16 Total_Load{integer} 157b16 160l11 160t21 249s24 254s37
+139i7 T1{integer} 145r15 148r13 149r13 149r19 159r17
+140i7 T2{integer} 145r35 152r13 152r19 159r22
+144i20 Id{positive}
+166I12 Rand_Range{integer} 167r58 171r11 183r11
+167K12 Rand_Int[12|44] 168r10 171r25 183r25 239r4
+168r4 Gen{12|50R9[167]} 171r41 183r41 239r20
+170V13 Rand_Time{duration} 170b13 170>24 174l8 174t17 196s16 205s16 215s16
+. 223s16
+170f24 Max{float} 173r44
+171i7 R{166I12} 173r30
+179T14 Cow 179d19 181b14 229l8 229t11 234r30 243r23
+179i19 Id{positive} 189r33 192r33 195r34 197r34 200r33 202r33 204r33 206r33
+. 210r33 212r33 214r33 216r33 218r33 220r33 222r34 224r34 228r21
+183i7 R{166I12} 184r32
+184b7 Vacc_First{boolean} 187r10
+234P9 Cow_Access(179T14) 235r36
+235a4 Cows(234P9) 242r13 243m7
+242i8 I{integer} 243r13 243r28
 
