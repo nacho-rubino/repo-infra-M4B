@@ -1,5 +1,8 @@
 #include <stdio.h>
+<<<<<<< HEAD
 
+=======
+>>>>>>> c2d7810510bfe39a416e6edfe2bb0d03a8079f8d
 #include <stdlib.h>
 #include <pthread.h>
 #include <semaphore.h>
@@ -161,3 +164,7 @@ sem_destroy(&sem_puede_leer[i]);
 }
 return 0;
 }
+<<<<<<< HEAD
+=======
+
+>>>>>>> c2d7810510bfe39a416e6edfe2bb0d03a8079f8d
