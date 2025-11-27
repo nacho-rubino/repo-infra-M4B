@@ -80,7 +80,7 @@ logout() {
     echo "Sesión de '$current_user' cerrada."
     current_user=""
   else
-    echo "No hay ningún usuario con sesión iniciada."
+    echo "No hay ningun usuario con sesion iniciada."
   fi
 }
 
@@ -102,7 +102,6 @@ local prompt="$1" var
 while :; do
 read -r -p "$prompt" var
 [[ -n "$var" ]] && echo "$var" && return 0
-echo "No puede ser vacio"
 done
 }
 
@@ -110,7 +109,6 @@ read_int_ge0() {
 local prompt="$1" val
 while :; do
 read -r -p "$prompt" val
-
 if [[ "$val" =~ ^[0-9]+$ ]]; then
 echo "$val"
 return 0
@@ -136,7 +134,7 @@ precio=$(read_int_ge0 "Precio unitario (entero): ")
 codigo=$(to_code "$tipo")
 esc_modelo=${modelo//,/;}
 esc_desc=${descripcion//,/;}
-echo "$codigo,$tipo,$esc_modelo,$esc_desc,$cantidad,$precio" >> "$INV_FILE"
+printf "%s,%s,%s,%s,%s,%s\n" "$codigo" "$tipo" "$esc_modelo" "$esc_desc" "$cantidad" "$precio" >> "$INV_FILE"
 echo "$codigo - $(echo "$tipo" | tr '[:upper:]' '[:lower:]') - $modelo - $descripcion - $cantidad - \$ $precio"
 }
 
@@ -151,7 +149,7 @@ sell_product() {
   i=0
   while IFS=',' read -r codigo tipo modelo desc cant precio; do
     productos+=("$codigo,$tipo,$modelo,$desc,$cant,$precio")
-    echo "$((i+1)). $tipo - $modelo - \$ $precio (Stock: $cant)"
+    printf "%d. %s - %s - \$ %s (Stock: %s)\n" "$((i+1))" "$tipo" "$modelo" "$precio" "$cant"
     ((i++))
   done < "$INV_FILE"
 
@@ -193,7 +191,7 @@ sell_product() {
 
 
 filter_products() {
-if [[ ! -s "$INV_FILE" ]] then
+if [[ ! -s "$INV_FILE" ]]; then
 echo "No hay productos en el inventario"
 return
 fi
